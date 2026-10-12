@@ -84,6 +84,12 @@ class InternalPhase(unittest.TestCase):
         self.assertEqual(self.i("a.swift", 'let t = "Hide OSA Desktop windows"'),
                          'let t = "Hide OSA Desktop windows"')
 
+    def test_legacy_upstream_names_protected(self):
+        self.assertEqual(self.i("a.swift", 'let legacy = "Vorssaint Utils"'), 'let legacy = "Vorssaint Utils"')
+        self.assertEqual(self.i("a.sh", 'pkill -x VorssaintUtils'), 'pkill -x VorssaintUtils')
+        self.assertEqual(self.i("a.sh", 'LEGACY_APP="/Applications/Vorssaint Utils.app"; X=Vorssaint'),
+                         'LEGACY_APP="/Applications/Vorssaint Utils.app"; X=OSADesktop')
+
 
 class Idempotence(unittest.TestCase):
     def test_second_run_noop(self):

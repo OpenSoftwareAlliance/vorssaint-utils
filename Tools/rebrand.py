@@ -47,7 +47,16 @@ def _visible_line(path, line):
     return line
 
 
+LEGACY = re.compile(r"(Vorssaint Utils|VorssaintUtils)")
+
+
 def _internal_segment(seg, code):
+    # Legacy upstream names must keep matching real legacy installs.
+    parts = LEGACY.split(seg)
+    return "".join(p if i % 2 else _internal_plain(p, code) for i, p in enumerate(parts))
+
+
+def _internal_plain(seg, code):
     seg = seg.replace("VORSSAINT_", "OSA_DESKTOP_").replace("VORSSAINT", "OSA_DESKTOP")
     seg = seg.replace("Vorssaint", "OSADesktop")
     seg = seg.replace("vorssaint_", "osa_desktop_")
