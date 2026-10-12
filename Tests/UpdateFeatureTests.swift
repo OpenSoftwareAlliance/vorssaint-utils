@@ -1265,7 +1265,7 @@ enum UpdateFeatureTests {
         ![Menu bar temperature metrics](Resources/Images/menu-bar-temperature-metrics.png)
 
         ### Website
-        - Official site: [osaDesktop.com](https://osa.better-web.org).
+        - Official site: [osa.better-web.org](https://osa.better-web.org).
 
         ## [2.17.1] - 2026-06-17
 

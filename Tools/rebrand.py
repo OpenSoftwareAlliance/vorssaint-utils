@@ -47,7 +47,7 @@ def _visible_line(path, line):
     return line
 
 
-LEGACY = re.compile(r"(Vorssaint Utils|VorssaintUtils)")
+LEGACY = re.compile(r"(Vorssaint Utils|VorssaintUtils|vorssaint-utils-clamshell|vorssaint-clamshell)")
 
 
 def _internal_segment(seg, code):

@@ -90,6 +90,12 @@ class InternalPhase(unittest.TestCase):
         self.assertEqual(self.i("a.sh", 'LEGACY_APP="/Applications/Vorssaint Utils.app"; X=Vorssaint'),
                          'LEGACY_APP="/Applications/Vorssaint Utils.app"; X=OSADesktop')
 
+    def test_legacy_sudoers_rules_protected(self):
+        line = '"/etc/sudoers.d/vorssaint-clamshell", "/etc/sudoers.d/vorssaint-utils-clamshell"'
+        self.assertEqual(self.i("a.swift", line), line)
+        self.assertEqual(self.i("uninstall.sh", "RULES=(/etc/sudoers.d/vorssaint-clamshell)"),
+                         "RULES=(/etc/sudoers.d/vorssaint-clamshell)")
+
 
 class Idempotence(unittest.TestCase):
     def test_second_run_noop(self):

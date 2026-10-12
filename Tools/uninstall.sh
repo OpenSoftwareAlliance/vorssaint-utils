@@ -203,7 +203,7 @@ rm -f "$HOME/Library/Preferences/ByHost/$BUNDLE".*.plist(N)
 # same files the app looks for. Each path is checked on its own. zsh passes an
 # unquoted string to a command as a single word, and one `ls` over all three
 # fails as soon as any of them is missing.
-RULES=(/etc/sudoers.d/osa-desktop-clamshell /etc/sudoers.d/osa-desktop-utils-clamshell /etc/sudoers.d/vorss-clamshell)
+RULES=(/etc/sudoers.d/osa-desktop-clamshell /etc/sudoers.d/vorssaint-clamshell /etc/sudoers.d/vorssaint-utils-clamshell /etc/sudoers.d/vorss-clamshell)
 found_rules=()
 for rule in "${RULES[@]}"; do
     [[ -e "$rule" ]] && found_rules+=("$rule")
