@@ -38,7 +38,7 @@ Turn the fork into **OSA Desktop** without adding, removing or changing any feat
 1. **R1 Identity.** Every user-visible name, bundle id, icon, URL and support channel follows the mapping above, in all localizations.
 2. **R2 No Vorssaint infrastructure.** No code path sends requests to `*.vorssaint.com` or reads from `vorssaint/*` repositories.
 3. **R3 Link sharing and feedback gated.** When `OSAShareEndpoint` is empty, the "share by link" actions for screenshots and recordings and the in-app feedback form are hidden; all other sharing (Share menu, files, clipboard) keeps working. When it is set to a URL, those features use it. The implementation code is kept.
-4. **R4 Internal rename.** Internal identifiers are renamed by a committed, deterministic script (`Tools/rebrand.py`). Re-running it on the result is a no-op.
+4. **R4 Internal rename.** Internal identifiers are renamed by a committed, deterministic script (`Tools/rebrand.py`). Re-running it on the result is a no-op. Copyright notice lines are never modified.
 5. **R5 Unsigned builds.** `build.sh`, `ci.yml` and `release.yml` produce unsigned builds and DMGs without requiring any certificate or secret. Signing and notarization run only when `OSA_TEAM_ID` and the signing secrets are present.
 6. **R6 Docs.** README, NOTICE, TRADEMARKS, CONTRIBUTING, SECURITY, SUPPORT, PRIVACY and PERMISSIONS refer to OSA Desktop and OSA channels.
 7. **R7 Safe updates.** The team id used by the in-app installer comes from `OSA_TEAM_ID` baked at build time. With no team id, the updater checks `OpenSoftwareAlliance/osa-desktop` releases, notifies the user and opens the release page instead of installing.
@@ -46,7 +46,7 @@ Turn the fork into **OSA Desktop** without adding, removing or changing any feat
 ### Acceptance criteria
 
 - **AC1.** A baseline of `./build.sh` and `./build.sh --test` is recorded on the unmodified fork before any change. After the rebrand, both produce the same result as the baseline (same pass/fail set, apart from tests renamed by the script).
-- **AC2.** `git grep -i vorssaint` matches only an explicit allowlist: `LICENSE`, historical `CHANGELOG.md` entries, `NOTICE`, the README credits section, `docs/specs/**`, and `Tools/rebrand.py`.
+- **AC2.** `git grep -i vorssaint` matches only an explicit allowlist: copyright notice lines (`Copyright (C) … Vorssaint`, which must be preserved under the GPL), `LICENSE`, historical `CHANGELOG.md` entries, `NOTICE`, the README credits section, `docs/specs/**`, and the rebrand tooling (`Tools/rebrand.py`, `Tools/test_rebrand.py`, `Tools/check-rebrand.sh`).
 - **AC3.** `git grep -i 'vorssaint.com'` outside the allowlist returns nothing (R2).
 - **AC4.** A test covers R3 in both states (endpoint empty → sharing-by-link and feedback hidden; endpoint set → available).
 - **AC5.** Running `Tools/rebrand.py` a second time changes no files.
