@@ -20,8 +20,7 @@ jobs:
       startsWith(github.repository, 'OpenSoftwareAlliance/') &&
       github.event_name == 'push' &&
       github.ref_type == 'tag' &&
-      github.actor == 'vorssaint' &&
-      github.triggering_actor == 'vorssaint'
+      github.repository_owner == 'OpenSoftwareAlliance'
     runs-on: macos-26
     timeout-minutes: 30
     permissions:
@@ -77,8 +76,7 @@ jobs:
       startsWith(github.repository, 'OpenSoftwareAlliance/') &&
       github.event_name == 'push' &&
       github.ref_type == 'tag' &&
-      github.actor == 'vorssaint' &&
-      github.triggering_actor == 'vorssaint'
+      github.repository_owner == 'OpenSoftwareAlliance'
     runs-on: macos-26
     timeout-minutes: 30
     environment: release-signing
@@ -115,6 +113,10 @@ jobs:
             exit 1
           fi
           echo "commit_sha=$COMMIT_SHA" >> "$GITHUB_OUTPUT"
+
+      - name: Announce unsigned build
+        if: ${{ env.OSA_TEAM_ID == '' }}
+        run: echo "::notice::OSA_TEAM_ID not set; publishing an unsigned build"
 
       - name: Set up signing
         if: ${{ env.OSA_TEAM_ID != '' }}
@@ -226,7 +228,7 @@ jobs:
             if [[ -n "${OSA_TEAM_ID:-}" ]]; then
               echo "Signed with an Apple Developer ID and notarized by Apple, so it downloads and opens normally. Requires macOS 14 or later. Open the .dmg below and drag OSA Desktop to Applications."
             else
-              echo "Unsigned build: right-click → Open on first launch. Requires macOS 14 or later. Open the .dmg below and drag OSA Desktop to Applications."
+              echo "Unsigned build: on first launch, open System Settings → Privacy & Security and click Open Anyway. Requires macOS 14 or later. Open the .dmg below and drag OSA Desktop to Applications."
             fi
           } > "$NOTES_FILE"
           {
@@ -275,8 +277,7 @@ jobs:
       startsWith(github.repository, 'OpenSoftwareAlliance/') &&
       github.event_name == 'push' &&
       github.ref_type == 'tag' &&
-      github.actor == 'vorssaint' &&
-      github.triggering_actor == 'vorssaint'
+      github.repository_owner == 'OpenSoftwareAlliance'
     runs-on: macos-26
     timeout-minutes: 10
     permissions:
