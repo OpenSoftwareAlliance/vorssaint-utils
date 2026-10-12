@@ -1810,7 +1810,7 @@ enum RepositoryFeatureTests {
         // MARK: The stable identity is judged by whether codesign can sign with it
         // A find-identity listing names certificates codesign then rejects, and
         // -v excludes every self-signed one, so neither spelling may decide.
-        for (script, code, identity) in [("build.sh", buildScriptCode, "$LEGACY_IDENTITY"),
+        for (script, code, identity) in [("build.sh", buildScriptCode, "$LOCAL_IDENTITY"),
                                          ("Tools/setup-signing.sh", signingSetupCode.components(separatedBy: "\n"),
                                           "$IDENTITY")] {
             suite.expect(!code.contains { $0.contains("find-identity") && $0.contains(identity) },

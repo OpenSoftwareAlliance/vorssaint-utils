@@ -23,6 +23,6 @@ run_case "legacy token in allowlisted file passes" 0 Tools/uninstall.sh 'LEGACY_
 run_case "extra vorssaint beside legacy token fails" 1 Tools/uninstall.sh 'x="Vorssaint Utils" vorssaint'
 run_case "real copyright header passes" 0 Sources/A.swift '// Copyright (C) 2026 Vorssaint'
 run_case "copyright with trailing text fails" 1 Sources/A.swift '// Copyright (C) 2026 Vorssaint see vorssaint.com'
-run_case "team id fails" 1 Sources/A.swift 'let t = "3D485NHW29"'
+run_case "team id fails" 1 Sources/A.swift 'let t = "3D485'"NHW29"'"'
 run_case "clean repo passes" 0 Sources/A.swift 'let a = 1'
 exit $((fails>0))

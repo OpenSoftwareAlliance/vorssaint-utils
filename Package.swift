@@ -5,7 +5,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "OSA Desktop",
+    name: "OSADesktop",
     platforms: [.macOS(.v14)],
     targets: [
         .systemLibrary(
@@ -17,7 +17,7 @@ let package = Package(
             path: "Sources/VMStatisticsCompat"
         ),
         .executableTarget(
-            name: "OSA Desktop",
+            name: "OSADesktop",
             dependencies: ["VMStatisticsCompat", "HIDEventSystem"],
             path: "Sources/OSADesktop"
         )

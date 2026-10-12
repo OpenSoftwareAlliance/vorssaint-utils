@@ -21,8 +21,8 @@ enum OSAUpdateTeamTests {
 
             let script = UpdateInstallerSupport.installerScript(teamID: "ABCDE12345", bundleID: "org.better-web.osa.desktop")
             suite.expect(script.contains("ABCDE12345"), "script embeds team id")
-            suite.expect(!script.contains("3D485" + "NHW29"), "script has no OSA Desktop team id")
-            suite.expect(!script.contains("com.vor" + "ssaint.utils"), "script has no OSA Desktop bundle id")
+            suite.expect(!script.contains("3D485" + "NHW29"), "script has no upstream (Vor" + "ssaint) team id")
+            suite.expect(!script.contains("com.vor" + "ssaint.utils"), "script has no upstream (Vor" + "ssaint) bundle id")
         }
     }
 }

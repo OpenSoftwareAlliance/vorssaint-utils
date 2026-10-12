@@ -19,8 +19,6 @@ legacy_rules=(
   'Sources/OSADesktop/Core/BundleMigration.swift|Vorssaint Utils'
   'Sources/OSADesktop/Services/ShellSupport.swift|vorssaint-utils-clamshell|vorssaint-clamshell'
   'Tools/uninstall.sh|Vorssaint Utils|VorssaintUtils|vorssaint-utils-clamshell|vorssaint-clamshell'
-  'Tools/setup-signing.sh|Vorssaint Utils'
-  'Tools/ci-setup-signing.sh|Vorssaint Utils'
   'build.sh|Vorssaint Utils|VorssaintUtils'
   'Tests/DeveloperInstallIsolationTests.sh|Vorssaint Utils|VorssaintUtils'
 )
@@ -65,7 +63,9 @@ while IFS= read -r hit; do
 done < <(git grep -n -I -i vorssaint || true)
 
 hosts=$(git grep -n -i 'vorssaint\.com' | grep -Ev "$allow_files" || true)
-team=$(git grep -n '3D485NHW29' | grep -Ev '^(docs/specs/|Tools/(check-rebrand|test_check_rebrand)\.sh)' || true)
+# Split so this script does not itself contain the upstream team id.
+team_id="3D485""NHW29"
+team=$(git grep -n "$team_id" | grep -Ev '^docs/specs/' || true)
 
 status=0
 [[ -n "$leaks" ]] && { echo "Vorssaint references outside allowlist:"; printf '%s' "$leaks"; status=1; }
