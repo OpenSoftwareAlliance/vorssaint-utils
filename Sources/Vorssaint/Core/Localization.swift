@@ -1085,25 +1085,14 @@ struct Strings {
     let shortcutsPageCaption: String
     let shortcutsPageTitle: String
     let settingsSearchPlaceholder: String
-    let donateHeading: String
-    let donateMessage: String
-    let donateButton: String
     let donateThanks: String
     let supportIntroTitle: String
-    let supportIntroMessage: String
     let supportIntroStarButton: String
     let supportIntroStarMessage: String
     /// A quiet line under the donation button inviting a GitHub star instead.
     let supportIntroStarHint: String
-    let supportIntroCoffeeButton: String
     let supportIntroLaterButton: String
     let supportIntroDoneButton: String
-    let discordIntroTitle: String
-    let discordIntroMessage: String
-    let discordIntroJoinButton: String
-    let communityIntroTitle: String
-    let communityIntroMessage: String
-    let communityIntroFollowButton: String
     let homebrewOfficialIntroTitle: String
     let homebrewOfficialIntroMessage: String
     let homebrewOfficialIntroInstallLabel: String
@@ -2187,24 +2176,13 @@ extension Strings {
         shortcutsPageCaption: "Edite aqui todos os atalhos globais dos recursos instalados neste Mac. Os inativos continuam salvos, mas não funcionam.",
         shortcutsPageTitle: "Atalhos de teclado",
         settingsSearchPlaceholder: "Buscar ajustes",
-        donateHeading: "Ajude o Vorssaint a continuar crescendo",
-        donateMessage: "O Vorssaint é gratuito, independente e desenvolvido no meu tempo livre. Se você quiser contribuir financeiramente, o Buy Me a Coffee ajuda diretamente a manter o desenvolvimento avançando.",
-        donateButton: "Apoiar no Buy Me a Coffee",
         donateThanks: "Obrigado por estar aqui. 🖤",
         supportIntroTitle: "Ajude o Vorssaint a continuar crescendo",
-        supportIntroMessage: "Se você quiser apoiar financeiramente o desenvolvimento, o Buy Me a Coffee é o único lugar para fazer isso.",
         supportIntroStarButton: "Dar uma estrela no GitHub",
         supportIntroStarMessage: "Apoio financeiro nunca é esperado. Dar uma estrela no GitHub ajuda mais pessoas a encontrar o Vorssaint e faz uma diferença enorme no desenvolvimento.",
         supportIntroStarHint: "Uma estrela no GitHub também ajuda mais pessoas a conhecer o Vorssaint e significa muito.",
-        supportIntroCoffeeButton: "Apoiar no Buy Me a Coffee",
         supportIntroLaterButton: "Agora não",
         supportIntroDoneButton: "Concluir",
-        discordIntroTitle: "A comunidade do Vorssaint no Discord está começando",
-        discordIntroMessage: "A comunidade do Vorssaint é nova e ainda está em desenvolvimento. Entre desde o começo para conhecer outros usuários e ajudar a construir um espaço acolhedor em torno do app.",
-        discordIntroJoinButton: "Entrar na comunidade no Discord",
-        communityIntroTitle: "Vem ver antes de todo mundo",
-        communityIntroMessage: "Quem já me seguia no X viu várias novidades desta atualização antes de todo mundo. Lá eu posto prévias do que vem depois e mostro como funciona, para você já saber o básico antes mesmo da atualização sair. Segue lá e veja o que vem depois!",
-        communityIntroFollowButton: "Seguir @vorssaint no X",
         homebrewOfficialIntroTitle: "Agora no catálogo oficial do Homebrew",
         homebrewOfficialIntroMessage: "O Vorssaint agora pode ser instalado direto do catálogo oficial do Homebrew.",
         homebrewOfficialIntroInstallLabel: "Nova instalação",
@@ -3283,24 +3261,13 @@ extension Strings {
         shortcutsPageCaption: "Edit every global shortcut from the features installed on this Mac. Inactive shortcuts stay saved but do not run.",
         shortcutsPageTitle: "Keyboard shortcuts",
         settingsSearchPlaceholder: "Search settings",
-        donateHeading: "Help Vorssaint keep growing",
-        donateMessage: "Vorssaint is free, independent and built in my spare time. If you would like to contribute financially, Buy Me a Coffee directly helps me keep development moving forward.",
-        donateButton: "Support on Buy Me a Coffee",
         donateThanks: "Thank you for being here. 🖤",
         supportIntroTitle: "Help Vorssaint keep growing",
-        supportIntroMessage: "If you would like to support development financially, Buy Me a Coffee is the one place to do it.",
         supportIntroStarButton: "Star Vorssaint on GitHub",
         supportIntroStarMessage: "Financial support is never expected. A star on GitHub helps more people discover Vorssaint and makes a real difference to its development.",
         supportIntroStarHint: "A star on GitHub also helps more people find Vorssaint, and it means a lot.",
-        supportIntroCoffeeButton: "Support on Buy Me a Coffee",
         supportIntroLaterButton: "Not now",
         supportIntroDoneButton: "Done",
-        discordIntroTitle: "The Vorssaint Discord community is just getting started",
-        discordIntroMessage: "The Vorssaint community is new and still being built. Join early to meet other users and help build a welcoming space around the app.",
-        discordIntroJoinButton: "Join the Discord community",
-        communityIntroTitle: "See it before everyone else",
-        communityIntroMessage: "People who already followed me on X saw several changes in this update before anyone else. I post previews of what is coming and show how it works, so you already know the basics before the update ships. Follow along and see what comes next!",
-        communityIntroFollowButton: "Follow @vorssaint on X",
         homebrewOfficialIntroTitle: "Now in the official Homebrew catalog",
         homebrewOfficialIntroMessage: "Vorssaint can now be installed directly from the official Homebrew catalog.",
         homebrewOfficialIntroInstallLabel: "New installation",
