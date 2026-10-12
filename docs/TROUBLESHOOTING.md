@@ -112,6 +112,10 @@ Run it from a clone of the repository, or download the single script from the re
 tccutil reset All org.better-web.osa.desktop
 ```
 
+## Side by side with upstream Vorssaint
+
+Installing or removing OSA Desktop's closed lid rule (`/etc/sudoers.d/osa-desktop-clamshell`) also removes the legacy Vorssaint rules (`/etc/sudoers.d/vorssaint-clamshell`, `vorssaint-utils-clamshell` and `vorss-clamshell`). If you also run upstream Vorssaint on the same Mac, its closed lid rule is deleted too, and you need to enable closed lid mode in Vorssaint again.
+
 ## Reporting a useful bug
 
 A clear report gets fixed faster. Try to include the following.

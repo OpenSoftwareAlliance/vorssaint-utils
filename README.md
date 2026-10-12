@@ -37,7 +37,7 @@ cd osa-desktop
 ./build.sh --dev
 ```
 
-Xcode Command Line Tools are the only requirement. Builds are unsigned unless `OSA_TEAM_ID` is set.
+Xcode Command Line Tools are the only requirement. Release builds are unsigned unless `OSA_TEAM_ID` is set, so the app does not install updates itself: it opens the release page instead. Download builds from the [Releases page](https://github.com/OpenSoftwareAlliance/osa-desktop/releases).
 
 ## The OSA suite
 

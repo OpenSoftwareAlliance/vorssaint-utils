@@ -4,7 +4,9 @@
 # in the `release` environment, where required reviewers can be configured.
 name: Release
 
-# Only an owner-created version tag can reach the protected signing job. The
+# Only a version tag pushed by an actor listed in OSA_RELEASE_ACTORS can start
+# a release (both the actor and the triggering actor are checked), and the
+# signing job additionally waits for approval of the `release` environment. The
 # preflight runs without release credentials and proves that the tag names a
 # verified commit already present on main before the environment can be approved.
 on:
