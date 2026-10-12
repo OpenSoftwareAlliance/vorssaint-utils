@@ -1,3 +1,7 @@
+# Release setup: set the repository or organization variable OSA_RELEASE_ACTORS
+# to a JSON array of the GitHub logins allowed to release (e.g. ["matbrgz"]).
+# While it is unset, no release job runs. Signing and notarization secrets live
+# in the `release` environment, where required reviewers can be configured.
 name: Release
 
 # Only an owner-created version tag can reach the protected signing job. The
@@ -20,7 +24,9 @@ jobs:
       startsWith(github.repository, 'OpenSoftwareAlliance/') &&
       github.event_name == 'push' &&
       github.ref_type == 'tag' &&
-      github.repository_owner == 'OpenSoftwareAlliance'
+      github.repository_owner == 'OpenSoftwareAlliance' &&
+      contains(fromJSON(vars.OSA_RELEASE_ACTORS || '[]'), github.actor) &&
+      contains(fromJSON(vars.OSA_RELEASE_ACTORS || '[]'), github.triggering_actor)
     runs-on: macos-26
     timeout-minutes: 30
     permissions:
@@ -76,10 +82,12 @@ jobs:
       startsWith(github.repository, 'OpenSoftwareAlliance/') &&
       github.event_name == 'push' &&
       github.ref_type == 'tag' &&
-      github.repository_owner == 'OpenSoftwareAlliance'
+      github.repository_owner == 'OpenSoftwareAlliance' &&
+      contains(fromJSON(vars.OSA_RELEASE_ACTORS || '[]'), github.actor) &&
+      contains(fromJSON(vars.OSA_RELEASE_ACTORS || '[]'), github.triggering_actor)
     runs-on: macos-26
     timeout-minutes: 30
-    environment: release-signing
+    environment: release
     env:
       # Signing, notarization and verification run only when a team is
       # configured; otherwise the DMG is built unsigned.
@@ -277,7 +285,9 @@ jobs:
       startsWith(github.repository, 'OpenSoftwareAlliance/') &&
       github.event_name == 'push' &&
       github.ref_type == 'tag' &&
-      github.repository_owner == 'OpenSoftwareAlliance'
+      github.repository_owner == 'OpenSoftwareAlliance' &&
+      contains(fromJSON(vars.OSA_RELEASE_ACTORS || '[]'), github.actor) &&
+      contains(fromJSON(vars.OSA_RELEASE_ACTORS || '[]'), github.triggering_actor)
     runs-on: macos-26
     timeout-minutes: 10
     permissions:
