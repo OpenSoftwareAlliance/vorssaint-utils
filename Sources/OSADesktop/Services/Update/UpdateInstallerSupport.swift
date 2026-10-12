@@ -22,12 +22,8 @@ enum UpdateInstallerSupport {
         return trimmed
     }
 
-    /// The installer: waits for the app to exit, verifies and mounts the DMG,
-    /// stages and verifies the new bundle, swaps it in and relaunches.
-    /// Arguments: $1 app path, $2 dmg path, $3 pid to wait for,
-    /// $4 result marker path, $5 uid to relaunch as (used when running as
-    /// root, where a plain `open` could launch the app as root), $6 expected
-    /// version from the trusted release tag.
+    /// Whether this build can install updates itself (needs a configured team
+    /// id to verify the download) or should open the release page instead.
     static func installAction(teamID: String?) -> UpdateInstallAction {
         guard let teamID else { return .openReleasePage }
         return .install(teamID: teamID)
@@ -41,6 +37,12 @@ enum UpdateInstallerSupport {
         return #"identifier "\#(bundleID)" and \#(anchor)"#
     }
 
+    /// The installer: waits for the app to exit, verifies and mounts the DMG,
+    /// stages and verifies the new bundle, swaps it in and relaunches.
+    /// Arguments: $1 app path, $2 dmg path, $3 pid to wait for,
+    /// $4 result marker path, $5 uid to relaunch as (used when running as
+    /// root, where a plain `open` could launch the app as root), $6 expected
+    /// version from the trusted release tag.
     static func installerScript(teamID: String, bundleID: String) -> String {
         """
         #!/bin/sh
@@ -265,5 +267,17 @@ enum UpdateInstallerSupport {
     static func runsFromImmutableLocation(appPath: String,
                                           volumeIsReadOnly: (String) -> Bool) -> Bool {
         appPath.contains("/AppTranslocation/") || volumeIsReadOnly(appPath)
+    }
+}
+
+extension Strings {
+    /// Label of the button that starts an update: the install label when this
+    /// build can install itself, otherwise a plain "Download" (reusing the
+    /// existing localized string) because the button then opens the release page.
+    func updateActionButton(teamID: String? = OSABuildConfiguration.teamID()) -> String {
+        switch UpdateInstallerSupport.installAction(teamID: teamID) {
+        case .install: return updateInstallButton
+        case .openReleasePage: return networkDownload
+        }
     }
 }

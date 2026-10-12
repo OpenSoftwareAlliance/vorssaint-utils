@@ -23,13 +23,25 @@ enum OSABuildConfiguration {
 
     static func shareEndpoint(in info: [String: Any]? = Bundle.main.infoDictionary) -> URL? {
         guard let raw = info?[shareEndpointKey] as? String else { return nil }
-        let trimmed = raw.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard let components = URLComponents(string: trimmed),
+        return sanitizedEndpoint(raw)
+    }
+
+    /// The single endpoint validator, shared by the build-time value and the
+    /// developer override: https, a host, no userinfo, query, fragment or path.
+    static func sanitizedEndpoint(_ value: String) -> URL? {
+        let trimmed = value.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard var components = URLComponents(string: trimmed),
               components.scheme?.lowercased() == "https",
               let host = components.host, !host.isEmpty,
-              let url = components.url
+              components.user == nil,
+              components.password == nil,
+              components.query == nil,
+              components.fragment == nil,
+              components.path.isEmpty || components.path == "/"
         else { return nil }
-        return url
+        components.scheme = "https"
+        components.path = ""
+        return components.url
     }
 
     static func repository(in info: [String: Any]? = Bundle.main.infoDictionary) -> String {
@@ -44,7 +56,7 @@ enum OSABuildConfiguration {
     }
 
     static func releasesPageURL(in info: [String: Any]? = Bundle.main.infoDictionary) -> URL {
-        URL(string: "https://github.com/\(repository(in: info))/releases/latest")!
+        URL(string: "https://github.com/\(repository(in: info))/releases")!
     }
 
     static var isLinkSharingAvailable: Bool { shareEndpoint() != nil }

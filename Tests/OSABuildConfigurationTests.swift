@@ -24,12 +24,22 @@ enum OSABuildConfigurationTests {
             suite.expect(OSABuildConfiguration.shareEndpoint(in: ["OSAShareEndpoint": " https://share.osa.better-web.org "])?.absoluteString
                          == "https://share.osa.better-web.org", "valid endpoint trimmed")
 
+            for bad in ["https://user:pw@share.example", "https://share.example?x=1",
+                        "https://share.example/#frag", "https://share.example/v1"] {
+                suite.expect(OSABuildConfiguration.shareEndpoint(in: ["OSAShareEndpoint": bad]) == nil,
+                             "build endpoint rejects userinfo/query/fragment/path: \(bad)")
+            }
+
+            let strings = Strings.enUS
+            suite.expect(strings.updateActionButton(teamID: nil) == strings.networkDownload, "unsigned build shows Download")
+            suite.expect(strings.updateActionButton(teamID: "ABCDE12345") == strings.updateInstallButton, "signed build shows install")
+
             // Repository: owner/name, else default.
             suite.expect(OSABuildConfiguration.repository(in: nil) == "OpenSoftwareAlliance/osa-desktop", "default repo")
             suite.expect(OSABuildConfiguration.repository(in: ["OSARepository": "me/fork"]) == "me/fork", "custom repo")
             suite.expect(OSABuildConfiguration.repository(in: ["OSARepository": "bad repo/x y"]) == "OpenSoftwareAlliance/osa-desktop", "invalid repo -> default")
             suite.expect(OSABuildConfiguration.releasesPageURL(in: nil).absoluteString
-                         == "https://github.com/OpenSoftwareAlliance/osa-desktop/releases/latest", "release page")
+                         == "https://github.com/OpenSoftwareAlliance/osa-desktop/releases", "release page")
         }
     }
 }

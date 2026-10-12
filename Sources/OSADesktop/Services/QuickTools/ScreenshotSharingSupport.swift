@@ -97,19 +97,7 @@ enum ScreenshotSharingSupport {
     }
 
     static func sanitizedEndpoint(_ value: String) -> URL? {
-        let trimmed = value.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard var components = URLComponents(string: trimmed),
-              components.scheme?.lowercased() == "https",
-              components.host != nil,
-              components.user == nil,
-              components.password == nil,
-              components.query == nil,
-              components.fragment == nil,
-              components.path.isEmpty || components.path == "/"
-        else { return nil }
-        components.scheme = "https"
-        components.path = ""
-        return components.url
+        OSABuildConfiguration.sanitizedEndpoint(value)
     }
 
     static func uploadURL(endpoint: URL, duration: ScreenshotShareDuration) -> URL? {
