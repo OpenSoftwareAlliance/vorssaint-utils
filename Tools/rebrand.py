@@ -11,7 +11,7 @@ import sys
 
 EXCLUDE = ["LICENSE", "CHANGELOG.md", "NOTICE", "TRADEMARKS.md", "README.md",
            "docs/specs/*", "Tools/rebrand.py", "Tools/test_rebrand.py",
-           "Tools/check-rebrand.sh", ".git/*"]
+           "Tools/check-rebrand.sh", "Tools/test_check_rebrand.sh", ".git/*"]
 PROSE_EXT = (".strings", ".plist", ".md", ".json", ".yml", ".yaml", ".txt", ".html")
 CODE_EXT = (".swift", ".c", ".h", ".m", ".pl")
 LOWER_WORD = re.compile(r"(?<![A-Za-z0-9_.\-/])vorssaint(?![A-Za-z0-9_\-])|(?<=\.)vorssaint(?![A-Za-z0-9_\-])")
