@@ -4,7 +4,7 @@
 // Generates all icon assets:
 // - the app iconset and .icns from the exported Default rendition of the
 //   adaptive source (Resources/Brand/AppIcon-Default.png)
-// - the menu bar template glyph and BrandMark from the wordmark master
+// - the menu bar template glyph and BrandMark from the mark master
 //   (Resources/Brand/logo.png)
 // AppIcon-Default.png is a hand-exported twin of Resources/Brand/AppIcon.icon;
 // re-export it whenever the Icon Composer project changes. The build cannot read
@@ -114,14 +114,12 @@ func renderAppIcon(px: Int) -> Data? {
 
 // MARK: - Menu bar glyph (template)
 
-// The mark is ~1.97:1, so fitting it into a fixed box made the width the
-// limiting side and left the height unused, rendering it far shorter than the
-// menu bar icons around it. Size from the height and let the width follow.
+// The mark is square (~1:1), so size it from the height and let the width
+// follow; fitting it into the wide canvas would leave the height unused.
 let menuBarGlyphHeight: CGFloat = 12.5
-// Centered geometrically the mark reads high, since the thin ring tails carry
-// the bounding box below the planet body. Drop it onto the same visual floor
-// as its neighbours.
-let menuBarGlyphDrop: CGFloat = 1
+// Vertical nudge (points) to land the mark on the same visual floor as its
+// neighbours; the square, centered mark needs none.
+let menuBarGlyphDrop: CGFloat = 0
 // Taller than the mark needs: the same canvas holds the compact Keep Awake
 // symbols. Keep in sync with BlackHoleGlyph.pointSize in
 // Sources/OSADesktop/App/StatusItemController.swift; `--selftest` enforces it.
@@ -135,7 +133,7 @@ func renderMenuBarIcon(scale: Int) -> Data? {
     NSGraphicsContext.saveGraphicsState()
     NSGraphicsContext.current = ctx
     // Height-limited target spanning the full canvas width: drawMark keeps the
-    // aspect ratio and centers, landing the mark at 24.6×12.5 pt. Coordinates
+    // aspect ratio and centers, landing the square mark at 12.5×12.5 pt. Coordinates
     // are bottom-up, so dropping it lowers y.
     let ink = menuBarGlyphHeight * CGFloat(scale)
     let y = (CGFloat(height) - ink) / 2 - menuBarGlyphDrop * CGFloat(scale)
