@@ -158,9 +158,14 @@ final class ScreenshotService: ObservableObject {
             enabled: clipboardEnabled,
             shortcut: clipboardShortcut,
             storageKey: DefaultsKey.screenshotClipboardShortcut)
+        // Same rule as ScreenshotShareService.isAvailable, read without the main actor.
+        let sharingAvailable = ScreenshotSharingSupport.endpoint(
+            bundleIdentifier: Bundle.main.bundleIdentifier,
+            developerOverride: defaults.string(
+                forKey: DefaultsKey.screenshotSharingDeveloperEndpoint)) != nil
         uploadShortcutRegistrationFailed = !uploadHotkey.sync(
             enabled: ScreenshotSharingSupport.uploadShortcutEnabled(in: defaults)
-                && ScreenshotShareService.shared.isAvailable,
+                && sharingAvailable,
             shortcut: GlobalShortcut.saved(for: DefaultsKey.screenshotUploadShortcut,
                                            fallback: .screenshotUploadDefault),
             storageKey: DefaultsKey.screenshotUploadShortcut)

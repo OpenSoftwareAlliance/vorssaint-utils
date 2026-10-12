@@ -595,10 +595,15 @@ guard geteuid() == 0 else {
     exit(EXIT_FAILURE)
 }
 
+guard let appRequirement = FanControlIdentifiers.appCodeRequirement else {
+    log.error("No signing team configured; refusing to serve clients")
+    exit(EXIT_FAILURE)
+}
+
 private let controller = FanControlController()
 private let delegate = FanControlListenerDelegate(controller: controller)
 private let listener = NSXPCListener(machServiceName: FanControlIdentifiers.helperID)
-listener.setConnectionCodeSigningRequirement(FanControlIdentifiers.appCodeRequirement)
+listener.setConnectionCodeSigningRequirement(appRequirement)
 listener.delegate = delegate
 listener.activate()
 

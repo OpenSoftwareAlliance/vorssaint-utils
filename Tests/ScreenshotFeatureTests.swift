@@ -1311,7 +1311,7 @@ enum ScreenshotFeatureTests {
                 && routeStatements.dropFirst().first == "beginLatestCapture(capture)",
                "turning screenshots off invalidates pending shortcut uploads, and every capture starts as the latest one")
         suite.expect(serviceBody("    func syncWithPreferences() {")
-                    .contains("enabled: ScreenshotSharingSupport.uploadShortcutEnabled(in: defaults)\n                && ScreenshotShareService.shared.isAvailable,"),
+                    .contains("enabled: ScreenshotSharingSupport.uploadShortcutEnabled(in: defaults)\n                && sharingAvailable,"),
                "the upload shortcut is registered only while it and temporary links are both on and a share endpoint exists")
         suite.expect(serviceBody("    private func route(_ capture:").contains("latestCapture: latestCaptureToken)")
                 && serviceBody("    func restorePreview(").contains("latestCapture: nil)")

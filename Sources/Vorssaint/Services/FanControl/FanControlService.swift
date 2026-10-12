@@ -37,7 +37,7 @@ final class FanControlService: ObservableObject {
     }
 
     private static var helperVersion: String {
-        Bundle.main.object(forInfoDictionaryKey: "VorssaintFanControlHelperVersion") as? String
+        Bundle.main.object(forInfoDictionaryKey: "OSAFanControlHelperVersion") as? String
             ?? Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String
             ?? AppInfo.version
     }
@@ -84,6 +84,11 @@ final class FanControlService: ObservableObject {
 
     func refresh() {
         refreshAccessState()
+        guard accessState != .unavailable else {
+            snapshot = .empty
+            error = .helperUnavailable
+            return
+        }
         if accessState == .enabled {
             guard !replaceRegistrationIfNeeded() else { return }
             requestStatus()
@@ -279,10 +284,11 @@ final class FanControlService: ObservableObject {
             else { return false }
             return unregisterForRemoval(service)
         }
+        guard let requirement = FanControlIdentifiers.helperCodeRequirement else { return false }
         let connection = NSXPCConnection(machServiceName: FanControlIdentifiers.helperID,
                                          options: .privileged)
         connection.remoteObjectInterface = NSXPCInterface(with: FanControlXPCProtocol.self)
-        connection.setCodeSigningRequirement(FanControlIdentifiers.helperCodeRequirement)
+        connection.setCodeSigningRequirement(requirement)
         let semaphore = DispatchSemaphore(value: 0)
         let resultLock = NSLock()
         var restored = false
@@ -421,10 +427,11 @@ final class FanControlService: ObservableObject {
 
     private func proxy(errorHandler: @escaping (NSXPCConnection) -> Void) -> FanControlXPCProtocol? {
         if connection == nil {
+            guard let requirement = FanControlIdentifiers.helperCodeRequirement else { return nil }
             let connection = NSXPCConnection(machServiceName: FanControlIdentifiers.helperID,
                                              options: .privileged)
             connection.remoteObjectInterface = NSXPCInterface(with: FanControlXPCProtocol.self)
-            connection.setCodeSigningRequirement(FanControlIdentifiers.helperCodeRequirement)
+            connection.setCodeSigningRequirement(requirement)
             connection.interruptionHandler = { [weak self, weak connection] in
                 DispatchQueue.main.async {
                     guard let connection, self?.connection === connection else { return }
@@ -483,6 +490,9 @@ final class FanControlService: ObservableObject {
     // MARK: - Registration and local reads
 
     private func refreshAccessState() {
+        // Fail closed: without a build-time signing team no client can be
+        // verified, so the helper is never registered or contacted.
+        guard FanControlIdentifiers.isAvailable else { accessState = .unavailable; return }
         switch Self.appService.status {
         case .notRegistered: accessState = .notRegistered
         case .enabled: accessState = .enabled
