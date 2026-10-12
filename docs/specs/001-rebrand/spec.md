@@ -56,8 +56,8 @@ Turn the fork into **OSA Desktop** without adding, removing or changing any feat
 
 ## Out of scope
 
-- Porting Boring Notch features (spec 002).
-- A backend for link sharing and feedback, and any integration with OSA services (spec 003).
+- Porting Boring Notch features (specs 002-008).
+- A backend for link sharing and feedback, and any integration with OSA services (spec 009).
 - Obtaining a Developer ID certificate, notarization, publishing a signed release, hosting an update feed.
 - Any new feature, UI redesign or behavior change.
 - Migrating existing Vorssaint user preferences: the new bundle id starts with fresh preferences and permissions by design.
