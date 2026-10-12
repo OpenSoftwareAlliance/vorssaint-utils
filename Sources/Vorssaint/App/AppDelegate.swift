@@ -1746,6 +1746,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate, NSW
     }
 
     func openFeedbackWindow(kind: FeedbackKind = .bug) {
+        guard FeedbackService.isAvailable else { return }
         closePopover()
         let host = NSHostingController(rootView: FeedbackView(initialKind: kind) { [weak self] in
             self?.feedbackWindow?.close()

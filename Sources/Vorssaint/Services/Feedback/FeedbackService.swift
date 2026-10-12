@@ -58,7 +58,11 @@ enum FeedbackError: Error {
 final class FeedbackService {
     static let shared = FeedbackService()
 
-    private let endpoint = URL(string: "https://screenshots.vorssaint.com/v1/feedback")!
+    nonisolated static func endpoint(production: URL? = OSABuildConfiguration.shareEndpoint()) -> URL? {
+        FeedbackEndpoint.url(production: production)
+    }
+    nonisolated static var isAvailable: Bool { FeedbackEndpoint.isAvailable }
+
     private let session: URLSession
     private let encoder = JSONEncoder()
 
@@ -89,6 +93,7 @@ final class FeedbackService {
         ))
         guard body.count <= 8 * 1_024 else { throw FeedbackError.rejected }
 
+        guard let endpoint = Self.endpoint() else { throw FeedbackError.unavailable }
         var request = URLRequest(url: endpoint)
         request.httpMethod = "POST"
         request.httpBody = body

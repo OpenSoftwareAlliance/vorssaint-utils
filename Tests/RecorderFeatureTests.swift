@@ -106,7 +106,7 @@ enum RecorderFeatureTests {
                "recording links allow only one or six hours")
         let recordingShareEndpoint = RecordingSharingSupport.endpoint(
             bundleIdentifier: RecordingSharingSupport.developerBundleIdentifier,
-            developerOverride: "https://test.example/")
+            developerOverride: "https://test.example/", production: nil)!
         suite.expect(RecordingSharingSupport.uploadURL(endpoint: recordingShareEndpoint,
                                                  duration: .sixHours)?.absoluteString
                 == "https://test.example/v1/recordings?expiresIn=21600",

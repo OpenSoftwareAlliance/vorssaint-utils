@@ -85,7 +85,7 @@ enum ScreenshotFeatureTests {
             suite.expect(ScreenshotShareDuration.saved(in: uploadDefaults) == duration,
                          "the upload shortcut uses each supported saved expiry")
             let url = ScreenshotSharingSupport.uploadURL(
-                endpoint: ScreenshotSharingSupport.productionEndpoint,
+                endpoint: URL(string: "https://share.test.example")!,
                 duration: .saved(in: uploadDefaults))!
             suite.expect(URLComponents(url: url, resolvingAgainstBaseURL: false)?
                 .queryItems?.first?.value == String(duration.rawValue),
@@ -1311,8 +1311,8 @@ enum ScreenshotFeatureTests {
                 && routeStatements.dropFirst().first == "beginLatestCapture(capture)",
                "turning screenshots off invalidates pending shortcut uploads, and every capture starts as the latest one")
         suite.expect(serviceBody("    func syncWithPreferences() {")
-                    .contains("enabled: ScreenshotSharingSupport.uploadShortcutEnabled(in: defaults),"),
-               "the upload shortcut is registered only while it and temporary links are both on")
+                    .contains("enabled: ScreenshotSharingSupport.uploadShortcutEnabled(in: defaults)\n                && ScreenshotShareService.shared.isAvailable,"),
+               "the upload shortcut is registered only while it and temporary links are both on and a share endpoint exists")
         suite.expect(serviceBody("    private func route(_ capture:").contains("latestCapture: latestCaptureToken)")
                 && serviceBody("    func restorePreview(").contains("latestCapture: nil)")
                 && screenshotServiceCode.contains("self.discardLatestCapture(latestCapture)\n                    return [.discard]"),
@@ -3434,16 +3434,14 @@ enum ScreenshotFeatureTests {
                "temporary links allow only one, six or twenty-four hours")
         let testShareEndpoint = ScreenshotSharingSupport.endpoint(
             bundleIdentifier: ScreenshotSharingSupport.developerBundleIdentifier,
-            developerOverride: "https://test.example/")
+            developerOverride: "https://test.example/", production: nil)!
         suite.expect(testShareEndpoint.absoluteString == "https://test.example"
                 && ScreenshotSharingSupport.endpoint(
                     bundleIdentifier: "com.vorssaint.utils",
-                    developerOverride: "https://test.example").absoluteString
-                    == ScreenshotSharingSupport.productionEndpoint.absoluteString
+                    developerOverride: "https://test.example", production: nil) == nil
                 && ScreenshotSharingSupport.endpoint(
                     bundleIdentifier: ScreenshotSharingSupport.developerBundleIdentifier,
-                    developerOverride: "http://test.example")
-                    == ScreenshotSharingSupport.productionEndpoint,
+                    developerOverride: "http://test.example", production: nil) == nil,
                "only the Developer build accepts a valid HTTPS test endpoint")
         suite.expect(ScreenshotSharingSupport.uploadURL(endpoint: testShareEndpoint,
                                                   duration: .sixHours)?.absoluteString

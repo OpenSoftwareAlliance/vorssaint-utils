@@ -159,7 +159,8 @@ final class ScreenshotService: ObservableObject {
             shortcut: clipboardShortcut,
             storageKey: DefaultsKey.screenshotClipboardShortcut)
         uploadShortcutRegistrationFailed = !uploadHotkey.sync(
-            enabled: ScreenshotSharingSupport.uploadShortcutEnabled(in: defaults),
+            enabled: ScreenshotSharingSupport.uploadShortcutEnabled(in: defaults)
+                && ScreenshotShareService.shared.isAvailable,
             shortcut: GlobalShortcut.saved(for: DefaultsKey.screenshotUploadShortcut,
                                            fallback: .screenshotUploadDefault),
             storageKey: DefaultsKey.screenshotUploadShortcut)

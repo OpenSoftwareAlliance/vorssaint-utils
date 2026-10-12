@@ -203,55 +203,57 @@ struct ScreenshotCaptureSettings: View {
                 Text(strings.toolShortcutsTitle)
             }
 
-            Section {
-                Toggle(strings.shareEnabledToggle, isOn: $sharingEnabled)
-                    .onChange(of: sharingEnabled) { _, _ in service.syncWithPreferences() }
-                if sharingEnabled {
-                    Toggle(strings.uploadLastCapture, isOn: $uploadShortcutEnabled)
-                        .onChange(of: uploadShortcutEnabled) { _, _ in service.syncWithPreferences() }
-                    ShortcutPreferenceRow(role: .screenshotUpload,
-                                          isEnabled: uploadShortcutEnabled) {
-                        service.syncWithPreferences()
-                    }
-                    Picker(strings.uploadExpiry, selection: $uploadDuration) {
-                        ForEach(ScreenshotShareDuration.allCases) { duration in
-                            Text(duration.title(strings)).tag(duration.rawValue)
+            if ScreenshotShareService.shared.isAvailable {
+                Section {
+                    Toggle(strings.shareEnabledToggle, isOn: $sharingEnabled)
+                        .onChange(of: sharingEnabled) { _, _ in service.syncWithPreferences() }
+                    if sharingEnabled {
+                        Toggle(strings.uploadLastCapture, isOn: $uploadShortcutEnabled)
+                            .onChange(of: uploadShortcutEnabled) { _, _ in service.syncWithPreferences() }
+                        ShortcutPreferenceRow(role: .screenshotUpload,
+                                              isEnabled: uploadShortcutEnabled) {
+                            service.syncWithPreferences()
                         }
-                    }
-                    if uploadShortcutEnabled {
-                        if service.uploadShortcutRegistrationFailed {
-                            Text(l10n.s.shortcutUnavailable)
-                                .font(.caption)
-                                .foregroundStyle(.orange)
+                        Picker(strings.uploadExpiry, selection: $uploadDuration) {
+                            ForEach(ScreenshotShareDuration.allCases) { duration in
+                                Text(duration.title(strings)).tag(duration.rawValue)
+                            }
                         }
+                        if uploadShortcutEnabled {
+                            if service.uploadShortcutRegistrationFailed {
+                                Text(l10n.s.shortcutUnavailable)
+                                    .font(.caption)
+                                    .foregroundStyle(.orange)
+                            }
+                        }
+                        Text(strings.shareCaption)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
                     }
-                    Text(strings.shareCaption)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-                Button {
-                    showingSharePrivacy = true
-                } label: {
-                    Label(strings.sharePrivacyButton, systemImage: "hand.raised")
-                }
-                if !sharing.records.isEmpty {
                     Button {
-                        showingSharedLinks = true
+                        showingSharePrivacy = true
                     } label: {
-                        HStack {
-                            Label(strings.sharedLinksTitle, systemImage: "link")
-                            Spacer()
-                            Text("\(sharing.records.count)")
-                                .foregroundStyle(.secondary)
-                            Image(systemName: "chevron.right")
-                                .font(.caption.weight(.semibold))
-                                .foregroundStyle(.tertiary)
-                        }
+                        Label(strings.sharePrivacyButton, systemImage: "hand.raised")
                     }
-                    .buttonStyle(.plain)
+                    if !sharing.records.isEmpty {
+                        Button {
+                            showingSharedLinks = true
+                        } label: {
+                            HStack {
+                                Label(strings.sharedLinksTitle, systemImage: "link")
+                                Spacer()
+                                Text("\(sharing.records.count)")
+                                    .foregroundStyle(.secondary)
+                                Image(systemName: "chevron.right")
+                                    .font(.caption.weight(.semibold))
+                                    .foregroundStyle(.tertiary)
+                            }
+                        }
+                        .buttonStyle(.plain)
+                    }
+                } header: {
+                    Text(strings.shareSectionTitle)
                 }
-            } header: {
-                Text(strings.shareSectionTitle)
             }
         }
         .onAppear { sharing.refresh() }

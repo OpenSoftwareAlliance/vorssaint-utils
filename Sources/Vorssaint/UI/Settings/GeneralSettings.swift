@@ -145,12 +145,14 @@ struct GeneralSettings: View {
         }
     }
 
-    private var feedbackCard: some View {
-        SettingsCard {
-            SettingsRow(symbol: "bubble.left.and.text.bubble.right", title: feedbackStrings.sectionTitle,
-                        caption: feedbackStrings.sectionCaption) {
-                Button(feedbackStrings.openButton) {
-                    appDelegate()?.openFeedbackWindow()
+    @ViewBuilder private var feedbackCard: some View {
+        if FeedbackService.isAvailable {
+            SettingsCard {
+                SettingsRow(symbol: "bubble.left.and.text.bubble.right", title: feedbackStrings.sectionTitle,
+                            caption: feedbackStrings.sectionCaption) {
+                    Button(feedbackStrings.openButton) {
+                        appDelegate()?.openFeedbackWindow()
+                    }
                 }
             }
         }

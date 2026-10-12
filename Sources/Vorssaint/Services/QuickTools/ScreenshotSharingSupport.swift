@@ -81,16 +81,19 @@ enum ScreenshotSharingSupport {
         return true
     }
 
-    static let productionEndpoint = URL(string: "https://screenshots.vorssaint.com")!
     static let developerBundleIdentifier = "com.vorssaint.utils.dev"
     static let maximumUploadBytes = 25 * 1_024 * 1_024
 
-    static func endpoint(bundleIdentifier: String?, developerOverride: String?) -> URL {
-        guard bundleIdentifier == developerBundleIdentifier,
-              let developerOverride,
-              let candidate = sanitizedEndpoint(developerOverride)
-        else { return productionEndpoint }
-        return candidate
+    /// nil when this build has no OSA share endpoint and is not a developer
+    /// build with an override: link sharing is then hidden (spec 001 R3).
+    static func endpoint(bundleIdentifier: String?, developerOverride: String?,
+                         production: URL? = OSABuildConfiguration.shareEndpoint()) -> URL? {
+        if bundleIdentifier == developerBundleIdentifier,
+           let developerOverride,
+           let candidate = sanitizedEndpoint(developerOverride) {
+            return candidate
+        }
+        return production
     }
 
     static func sanitizedEndpoint(_ value: String) -> URL? {

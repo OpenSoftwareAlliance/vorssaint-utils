@@ -45,7 +45,6 @@ enum RecordingSharingSupport {
         let audioBitRate: Int
     }
 
-    static let productionEndpoint = URL(string: "https://screenshots.vorssaint.com")!
     static let developerBundleIdentifier = "com.vorssaint.utils.dev"
     /// Leaves transport headroom below the public 100 MB request ceiling.
     static let maximumUploadBytes = 96_000_000
@@ -54,12 +53,14 @@ enum RecordingSharingSupport {
     static let minimumVideoBitRate = 350_000
     static let audioBitRate = 128_000
 
-    static func endpoint(bundleIdentifier: String?, developerOverride: String?) -> URL {
-        guard bundleIdentifier == developerBundleIdentifier,
-              let developerOverride,
-              let candidate = ScreenshotSharingSupport.sanitizedEndpoint(developerOverride)
-        else { return productionEndpoint }
-        return candidate
+    static func endpoint(bundleIdentifier: String?, developerOverride: String?,
+                         production: URL? = OSABuildConfiguration.shareEndpoint()) -> URL? {
+        if bundleIdentifier == developerBundleIdentifier,
+           let developerOverride,
+           let candidate = ScreenshotSharingSupport.sanitizedEndpoint(developerOverride) {
+            return candidate
+        }
+        return production
     }
 
     static func uploadURL(endpoint: URL, duration: RecordingShareDuration) -> URL? {
