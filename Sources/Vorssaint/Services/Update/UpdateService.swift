@@ -27,7 +27,7 @@ final class UpdateService: ObservableObject {
     /// preview. Set alongside `.available`; cleared otherwise.
     @Published private(set) var availableNotes: String?
 
-    private let repository = "vorssaint/vorssaint-utils"
+    private let repository = OSABuildConfiguration.repository()
     private var downloadURL: URL?
     /// Size the release advertises for the asset, used to bound the download.
     private var downloadExpectedBytes: Int64?
@@ -207,6 +207,13 @@ final class UpdateService: ObservableObject {
 
     func downloadAndInstall() {
         if AppInfo.isDeveloperBuild { return }  // never replace the local dev build over itself
+        switch UpdateInstallerSupport.installAction(teamID: OSABuildConfiguration.teamID()) {
+        case .openReleasePage:
+            NSWorkspace.shared.open(OSABuildConfiguration.releasesPageURL())
+            return
+        case .install:
+            break
+        }
         guard let downloadURL else { return }
         // Pre-flight BEFORE spending the download: a translocated app or one
         // running from a read-only volume (the mounted DMG) can never be
@@ -326,27 +333,35 @@ final class UpdateService: ObservableObject {
         try? fm.removeItem(at: resultURL)
         try? fm.removeItem(at: resultURL.appendingPathExtension("progress"))
 
+        guard let teamID = OSABuildConfiguration.teamID() else {
+            failInstall(dmgPath: dmgPath, message: "Update signing team is not configured.")
+            return
+        }
         let appDirectory = (appPath as NSString).deletingLastPathComponent
         let lastFailure = UserDefaults.standard.string(forKey: DefaultsKey.updateLastInstallFailure)
         if fm.isWritableFile(atPath: appDirectory),
            !UpdateInstallerSupport.shouldForceAdminInstall(afterFailureCode: lastFailure) {
             launchUserInstaller(appPath: appPath, dmgPath: dmgPath, pid: pid,
-                                resultPath: resultURL.path, expectedVersion: expectedVersion)
+                                resultPath: resultURL.path, expectedVersion: expectedVersion,
+                                teamID: teamID)
         } else {
             // Either the folder is not writable, or the last attempt died at
             // the copy/swap step: retry with admin rights instead of failing
             // the same way twice.
             launchAdminInstaller(appPath: appPath, dmgPath: dmgPath, pid: pid,
-                                 resultPath: resultURL.path, expectedVersion: expectedVersion)
+                                 resultPath: resultURL.path, expectedVersion: expectedVersion,
+                                 teamID: teamID)
         }
     }
 
     private func launchUserInstaller(appPath: String, dmgPath: String, pid: Int32,
-                                     resultPath: String, expectedVersion: String) {
+                                     resultPath: String, expectedVersion: String,
+                                     teamID: String) {
         let scriptURL = FileManager.default.temporaryDirectory
             .appendingPathComponent("vorssaint-update-\(pid)-\(UUID().uuidString).sh")
         do {
-            try UpdateInstallerSupport.installerScript()
+            try UpdateInstallerSupport.installerScript(teamID: teamID,
+                                                       bundleID: Bundle.main.bundleIdentifier ?? "")
                 .write(to: scriptURL, atomically: true, encoding: .utf8)
         } catch {
             failInstall(dmgPath: dmgPath, message: error.localizedDescription)
@@ -377,13 +392,16 @@ final class UpdateService: ObservableObject {
     /// its own session so the prompt returns while the installer waits for our
     /// exit — and so it survives that exit.
     private func launchAdminInstaller(appPath: String, dmgPath: String, pid: Int32,
-                                      resultPath: String, expectedVersion: String) {
+                                      resultPath: String, expectedVersion: String,
+                                      teamID: String) {
         let command = UpdateInstallerSupport.elevatedInstallCommand(appPath: appPath,
                                                                     dmgPath: dmgPath,
                                                                     pid: pid,
                                                                     resultPath: resultPath,
                                                                     uid: getuid(),
-                                                                    expectedVersion: expectedVersion)
+                                                                    expectedVersion: expectedVersion,
+                                                                    teamID: teamID,
+                                                                    bundleID: Bundle.main.bundleIdentifier ?? "")
         // The in-process authorization holds the main thread until it is
         // answered, and the system dialog never appears while the Extra
         // Brightness overlay is on screen (#1917). Once the request waits,

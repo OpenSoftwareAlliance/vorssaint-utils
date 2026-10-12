@@ -7,6 +7,11 @@ import Foundation
 /// quoting for its elevated (admin) variant and the parsing of the result
 /// marker the script leaves behind. No AppKit, so the unit tests cover the
 /// quoting and the script's failure-reporting contract.
+enum UpdateInstallAction: Equatable {
+    case install(teamID: String)
+    case openReleasePage
+}
+
 enum UpdateInstallerSupport {
     /// Marker the script writes before each fallible step (write-ahead, so
     /// the marker names the failing step even if the script dies mid-way)
@@ -23,7 +28,20 @@ enum UpdateInstallerSupport {
     /// $4 result marker path, $5 uid to relaunch as (used when running as
     /// root, where a plain `open` could launch the app as root), $6 expected
     /// version from the trusted release tag.
-    static func installerScript() -> String {
+    static func installAction(teamID: String?) -> UpdateInstallAction {
+        guard let teamID else { return .openReleasePage }
+        return .install(teamID: teamID)
+    }
+
+    /// Team id is validated by OSABuildConfiguration (10 x [A-Z0-9]), so it is
+    /// safe to embed; the bundle id comes from Bundle.main.
+    static func verificationRequirement(teamID: String, bundleID: String?) -> String {
+        let anchor = #"anchor apple generic and certificate leaf[subject.OU] = "\#(teamID)""#
+        guard let bundleID else { return anchor }
+        return #"identifier "\#(bundleID)" and \#(anchor)"#
+    }
+
+    static func installerScript(teamID: String, bundleID: String) -> String {
         """
         #!/bin/sh
         APP="$1"; DMG="$2"; PID="$3"; RESULT="$4"; ASUSER="$5"; EXPECTED_VERSION="$6"
@@ -63,7 +81,7 @@ enum UpdateInstallerSupport {
         }
         while kill -0 "$PID" 2>/dev/null; do sleep 0.3; done
         note fail-dmg-verify
-        DMG_VERIFY_REQ='anchor apple generic and certificate leaf[subject.OU] = "3D485NHW29"'
+        DMG_VERIFY_REQ=\(shellSingleQuoted(verificationRequirement(teamID: teamID, bundleID: nil)))
         if ! /usr/bin/codesign -v --strict -R="$DMG_VERIFY_REQ" "$DMG" 2>/dev/null; then
             /bin/rm -f "$DMG"
             finalize
@@ -120,7 +138,7 @@ enum UpdateInstallerSupport {
                     elif /usr/sbin/spctl -a -t exec "$STAGE" >/dev/null 2>&1; then
                         GATEKEEPER_OK=1
                     fi
-                    VERIFY_REQ='identifier "com.vorssaint.utils" and anchor apple generic and certificate leaf[subject.OU] = "3D485NHW29"'
+                    VERIFY_REQ=\(shellSingleQuoted(verificationRequirement(teamID: teamID, bundleID: bundleID)))
                     note fail-verify
                     if /usr/bin/codesign -v --deep --strict -R="$VERIFY_REQ" "$STAGE" 2>/dev/null \
                         && [ "$GATEKEEPER_OK" = 1 ]; then
@@ -182,8 +200,10 @@ enum UpdateInstallerSupport {
                                        pid: Int32,
                                        resultPath: String,
                                        uid: uid_t,
-                                       expectedVersion: String) -> String {
-        let script = shellSingleQuoted(installerScript())
+                                       expectedVersion: String,
+                                       teamID: String,
+                                       bundleID: String) -> String {
+        let script = shellSingleQuoted(installerScript(teamID: teamID, bundleID: bundleID))
         let args = [appPath, dmgPath, "\(pid)", resultPath, "\(uid)", expectedVersion]
             .map(shellSingleQuoted)
             .joined(separator: " ")

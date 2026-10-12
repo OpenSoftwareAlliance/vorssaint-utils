@@ -960,7 +960,7 @@ enum UpdateFeatureTests {
         suite.expect(!UpdateInstallerSupport.runsFromImmutableLocation(appPath: "/Volumes/ExternalSSD/Vorssaint.app",
                                                                  volumeIsReadOnly: { _ in false }),
                "apps on a writable external volume stay updatable in place")
-        let installerScript = UpdateInstallerSupport.installerScript()
+        let installerScript = UpdateInstallerSupport.installerScript(teamID: "ABCDE12345", bundleID: "org.better-web.osa.desktop")
         for step in ["fail-dmg-verify", "fail-tempdir", "fail-mount", "fail-no-app-in-dmg",
                      "fail-copy", "fail-version", "fail-verify", "fail-swap", "note ok"] {
             suite.expect(installerScript.contains(step),
@@ -999,7 +999,9 @@ enum UpdateFeatureTests {
             pid: 123,
             resultPath: "/tmp/result",
             uid: 501,
-            expectedVersion: "3.3.3")
+            expectedVersion: "3.3.3",
+            teamID: "ABCDE12345",
+            bundleID: "org.better-web.osa.desktop")
         suite.expect(elevated.contains("POSIX::setsid()") && elevated.hasSuffix("&"),
                "elevated installer leaves this app's session so it outlives the app it replaces")
         suite.expect(elevated.contains("nohup"),

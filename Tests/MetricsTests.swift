@@ -71,6 +71,7 @@ struct MetricsTests {
                 UpdateHighlightsTests.run(suite)
                 UpdateIntroFlowTests.run(suite)
             }),
+            ("osa-updates", { OSAUpdateTeamTests.run(suite) }),
             ("osa-config", { OSABuildConfigurationTests.run(suite) }),
             ("osa-sharing-gate", { OSALinkSharingGateTests.run(suite) }),
             ("repository", { RepositoryFeatureTests.run(suite) }),
