@@ -187,7 +187,7 @@ jobs:
           VERSION="${GITHUB_REF_NAME#v}"
           mkdir -p dist/showcase
           if [[ "$VERSION" == "3.1.4" ]]; then
-            ASSET="vorssaint-3.1.4-showcase-1.mp4"
+            ASSET="osa-desktop-3.1.4-showcase-1.mp4"
             SOURCE="ReleaseAssets/$ASSET"
             TARGET="dist/showcase/$ASSET"
             if [[ -f "$SOURCE" ]]; then

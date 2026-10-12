@@ -197,7 +197,7 @@ enum FeatureCatalogTests {
         // 2s window made the gesture impossible for anyone pressing Escape
         // slower than once per two seconds (#697).
         let cleaningSource = (try? String(
-            contentsOfFile: "Sources/Vorssaint/Services/CleaningMode/CleaningModeManager.swift",
+            contentsOfFile: "Sources/OSADesktop/Services/CleaningMode/CleaningModeManager.swift",
             encoding: .utf8)) ?? ""
         let cleaningCode = cleaningSource
             .components(separatedBy: "\n")
@@ -553,7 +553,7 @@ enum FeatureCatalogTests {
         } else {
             suite.expect(false, "feature install defaults suite can be created")
         }
-        let runtimeSource = (try? String(contentsOfFile: "Sources/Vorssaint/App/FeatureRuntime.swift",
+        let runtimeSource = (try? String(contentsOfFile: "Sources/OSADesktop/App/FeatureRuntime.swift",
                                          encoding: .utf8)) ?? ""
         suite.expect(runtimeSource.contains(
             "setAvailable(AppFeature.allCases, available, enablingFirstInstalls: false)"),
@@ -677,7 +677,7 @@ enum FeatureCatalogTests {
         }
         suite.expect(SettingsBackupSupport.exportKeys().contains(DefaultsKey.featureHubKeptFeatures),
                "features someone chose to keep travel in backups, so a restored Mac never offers them again")
-        let hubUndoSource = (try? String(contentsOfFile: "Sources/Vorssaint/UI/Settings/FeatureHubSettings.swift",
+        let hubUndoSource = (try? String(contentsOfFile: "Sources/OSADesktop/UI/Settings/FeatureHubSettings.swift",
                                          encoding: .utf8)) ?? ""
         suite.expect(hubUndoSource.contains("setAvailable(batch, true, enablingFirstInstalls: false)"),
                "undoing the offer reinstalls without switching on what was never on")
@@ -711,7 +711,7 @@ enum FeatureCatalogTests {
             "appManagement", "calendar",
         ], "permission portal contains every supported permission")
         let onboardingViewSource = (try? String(
-            contentsOfFile: "Sources/Vorssaint/UI/Onboarding/OnboardingView.swift",
+            contentsOfFile: "Sources/OSADesktop/UI/Onboarding/OnboardingView.swift",
             encoding: .utf8)) ?? ""
         let additionalPermissionsAlignment =
             #"DisclosureGroup\(isExpanded: \$showingOtherPermissions\) \{\s+"#
@@ -752,10 +752,10 @@ enum FeatureCatalogTests {
                "no first-run preset installs a feature whose hardware the Mac may lack")
 
         let featureHubSource = (try? String(
-            contentsOfFile: "Sources/Vorssaint/UI/Settings/FeatureHubSettings.swift",
+            contentsOfFile: "Sources/OSADesktop/UI/Settings/FeatureHubSettings.swift",
             encoding: .utf8)) ?? ""
         let onboardingFeatureSource = (try? String(
-            contentsOfFile: "Sources/Vorssaint/UI/Onboarding/OnboardingView.swift",
+            contentsOfFile: "Sources/OSADesktop/UI/Onboarding/OnboardingView.swift",
             encoding: .utf8)) ?? ""
         suite.expect(featureHubSource.contains("installBlockedReason")
                 && onboardingFeatureSource.contains("installBlockedReason"),
@@ -1640,6 +1640,10 @@ enum FeatureCatalogTests {
                "loginwindow is protected")
         suite.expect(KillProcessSupport.isProtected(pid: ProcessInfo.processInfo.processIdentifier, name: "OSA Desktop"),
                "current app PID is protected")
+        for appName in ["OSADesktop", "OSA Desktop", "OSA Desktop (Developer)", "OSADesktopDeveloper"] {
+            suite.expect(KillProcessSupport.isProtected(pid: 12345, name: appName),
+                   "own process name is protected: \(appName)")
+        }
         suite.expect(!KillProcessSupport.isProtected(pid: 12345, name: "Safari", path: "/Applications/Safari.app/Contents/MacOS/Safari"),
                "ordinary user app is not protected")
         suite.expect(KillProcessSupport.numberComesBefore(90, 10, lhsPID: 2, rhsPID: 1,
@@ -2237,7 +2241,7 @@ enum FeatureCatalogTests {
         // AppKit reached from below the line would be a main thread violation
         // on every hotplug, wake and panel open.
         let brightnessSource = (try? String(
-            contentsOfFile: "Sources/Vorssaint/Services/Display/BrightnessService.swift",
+            contentsOfFile: "Sources/OSADesktop/Services/Display/BrightnessService.swift",
             encoding: .utf8)) ?? ""
         let brightnessWorkQueueHalf = brightnessSource
             .components(separatedBy: "// MARK: - Rebuild (work queue)").last ?? ""
@@ -2424,8 +2428,8 @@ enum FeatureCatalogTests {
                 && !SettingsBackupSupport.exportKeys().contains(
                     DefaultsKey.brightnessExtendedDimmingPaths),
                "the per-monitor extended dimming choice stays on this Mac")
-        for surface in ["Sources/Vorssaint/UI/Settings/EnergySettings.swift",
-                        "Sources/Vorssaint/UI/MenuPanel/BrightnessSection.swift"] {
+        for surface in ["Sources/OSADesktop/UI/Settings/EnergySettings.swift",
+                        "Sources/OSADesktop/UI/MenuPanel/BrightnessSection.swift"] {
             let source = (try? String(contentsOfFile: surface, encoding: .utf8)) ?? ""
             suite.expect(source.contains("SoftwareDimmingButton(display: display"),
                    "\(surface) offers the software dimming choice on its display rows")

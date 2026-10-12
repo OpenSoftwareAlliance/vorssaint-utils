@@ -5,7 +5,7 @@ import AppKit
 
 /// Opening the player from the island's cover or the radial Now Playing card
 /// runs as shipped against doubles that never activate, unhide or launch an
-/// app. Both are non-activating panels, so Vorssaint rarely holds activation
+/// app. Both are non-activating panels, so OSADesktop rarely holds activation
 /// of its own, and a bare request left the player where it was.
 enum NowPlayingOpenContract {
     static var events: [String] = []

@@ -19,7 +19,7 @@ let package = Package(
         .executableTarget(
             name: "OSA Desktop",
             dependencies: ["VMStatisticsCompat", "HIDEventSystem"],
-            path: "Sources/Vorssaint"
+            path: "Sources/OSADesktop"
         )
     ]
 )

@@ -50,7 +50,7 @@ enum OSALinkSharingGateTests {
                                                            linkSharingAvailable: true)
                             .contains(.screenshotUpload),
                          "shortcuts: upload role included when link sharing is available")
-            // No Vorssaint host anywhere in the defaults.
+            // No OSADesktop host anywhere in the defaults.
             suite.expect(OSABuildConfiguration.shareEndpoint(in: [:]) == nil, "no built-in default endpoint")
         }
     }

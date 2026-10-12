@@ -8,8 +8,8 @@ import os
 private let log = Logger(subsystem: FanControlIdentifiers.helperID, category: "FanControl")
 
 private final class FanControlOwnership {
-    private let lockPath = "/var/run/vorssaint-fan-control.lock"
-    private let markerPath = "/var/run/vorssaint-fan-control.active"
+    private let lockPath = "/var/run/osa-desktop-fan-control.lock"
+    private let markerPath = "/var/run/osa-desktop-fan-control.active"
     private var lockFile: Int32 = -1
 
     var isHeld: Bool { lockFile >= 0 }

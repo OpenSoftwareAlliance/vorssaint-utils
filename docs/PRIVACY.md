@@ -1,6 +1,6 @@
 # Privacy
 
-OSA Desktop is built to be local-first. Core features run on your Mac, and the app has no OSA Desktop account or cloud dashboard. Its Vorssaint-operated services are limited to temporary screenshot and recording links and feedback you explicitly choose to send.
+OSA Desktop is built to be local-first. Core features run on your Mac, and the app has no OSA Desktop account or cloud dashboard. Its OSADesktop-operated services are limited to temporary screenshot and recording links and feedback you explicitly choose to send.
 
 ## The short version
 

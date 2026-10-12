@@ -1017,7 +1017,7 @@ enum UtilitiesFeatureTests {
         suite.expect(wheelShortcuts() == [seedShortcut],
                "until a wheel is saved the role key is the shortcut the page lists")
         let shortcutsPageCode = ((try? String(
-            contentsOfFile: "Sources/Vorssaint/UI/Settings/ShortcutsSettings.swift",
+            contentsOfFile: "Sources/OSADesktop/UI/Settings/ShortcutsSettings.swift",
             encoding: .utf8)) ?? "")
             .components(separatedBy: "\n")
             .filter { !$0.trimmingCharacters(in: .whitespaces).hasPrefix("//") }
@@ -1111,7 +1111,7 @@ enum UtilitiesFeatureTests {
         // the button is claimed, nothing past that point hands an event back,
         // or the down and the up split.
         let radialServiceCode = ((try? String(
-            contentsOfFile: "Sources/Vorssaint/Services/RadialMenu/RadialMenuService.swift",
+            contentsOfFile: "Sources/OSADesktop/Services/RadialMenu/RadialMenuService.swift",
             encoding: .utf8)) ?? "")
             .components(separatedBy: "\n")
             .filter { !$0.trimmingCharacters(in: .whitespaces).hasPrefix("//") }
@@ -1302,8 +1302,8 @@ enum UtilitiesFeatureTests {
                "disk eject exclusions travel in backups")
 
         // MARK: A sleeping clock
-        for shareService in ["Sources/Vorssaint/Services/QuickTools/ScreenshotShareService.swift",
-                             "Sources/Vorssaint/Services/Recorder/RecordingShareService.swift"] {
+        for shareService in ["Sources/OSADesktop/Services/QuickTools/ScreenshotShareService.swift",
+                             "Sources/OSADesktop/Services/Recorder/RecordingShareService.swift"] {
             let shareCode = ((try? String(contentsOfFile: shareService, encoding: .utf8)) ?? "")
                 .components(separatedBy: "\n")
                 .filter { !$0.trimmingCharacters(in: .whitespaces).hasPrefix("//") }
@@ -1319,7 +1319,7 @@ enum UtilitiesFeatureTests {
         // the label's cell adds unaccounted for -- the labels have to be the
         // ones asked.
         let quitHUDSource = (try? String(
-            contentsOfFile: "Sources/Vorssaint/UI/QuitProtection/QuitProtectionHUD.swift",
+            contentsOfFile: "Sources/OSADesktop/UI/QuitProtection/QuitProtectionHUD.swift",
             encoding: .utf8)) ?? ""
         suite.expect(quitHUDSource.count > 1_000,
                "the quit protection HUD source is readable (\(quitHUDSource.count) bytes)")
@@ -1355,7 +1355,7 @@ enum UtilitiesFeatureTests {
                                                    excludedVolumes: ["1234-5678-abcd"]),
                "an excluded volume UUID is honoured only when the caller hands the UUID over")
         let diskExclusionsListCode = ((try? String(
-            contentsOfFile: "Sources/Vorssaint/UI/Settings/DiskExclusionsList.swift",
+            contentsOfFile: "Sources/OSADesktop/UI/Settings/DiskExclusionsList.swift",
             encoding: .utf8)) ?? "").components(separatedBy: "\n")
             .filter { !$0.trimmingCharacters(in: .whitespaces).hasPrefix("//") }
             .joined(separator: "\n")

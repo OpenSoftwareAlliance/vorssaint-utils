@@ -73,7 +73,7 @@ body:
       description: Add screenshots or recordings if applicable.
 
   - type: input
-    id: vorssaint_version
+    id: osa_desktop_version
     attributes:
       label: OSA Desktop Version
       description: The number shown in Settings, on the About page.

@@ -1375,7 +1375,7 @@ enum ClipboardFeatureTests {
         ClipboardHistoryImageEditorTests.run(suite)
         ClipboardHistoryAccessTests.run(suite)
 
-        let pasteboardAccess = GeneralPasteboardAccess(label: "Vorssaint.Tests.PasteboardAccess")
+        let pasteboardAccess = GeneralPasteboardAccess(label: "OSADesktop.Tests.PasteboardAccess")
         let pasteboardGroup = DispatchGroup()
         let pasteboardStateLock = NSLock()
         var activePasteboardOperations = 0
@@ -1433,14 +1433,14 @@ enum ClipboardFeatureTests {
         suite.expect(laneAnswer == 887, "the queued work runs once the lane comes free")
         suite.expect(laneAnsweredOnMain, "the pasteboard lane answers on the main queue")
         let pastePlainSource = (try? String(
-            contentsOfFile: "Sources/Vorssaint/Services/QuickTools/PastePlainService.swift",
+            contentsOfFile: "Sources/OSADesktop/Services/QuickTools/PastePlainService.swift",
             encoding: .utf8)) ?? ""
         suite.expect(pastePlainSource.contains("GeneralPasteboardAccess.shared.async"),
                "paste as plain text reads the clipboard on the lane, not on the main thread")
         // Ordering out keeps a sheet attached, so a Clear unpinned question
         // left open would come back with its old count on the next opening.
         let historySource = (try? String(
-            contentsOfFile: "Sources/Vorssaint/Services/Clipboard/ClipboardHistoryService.swift",
+            contentsOfFile: "Sources/OSADesktop/Services/Clipboard/ClipboardHistoryService.swift",
             encoding: .utf8)) ?? ""
         let hideBody = historySource.components(separatedBy: "    func hideHistoryWindow() {").dropFirst().first?
             .components(separatedBy: "\n    }\n").first ?? ""
@@ -1453,7 +1453,7 @@ enum ClipboardFeatureTests {
                         < (hideBody.range(of: "orderOut")?.lowerBound ?? hideBody.startIndex),
                "the history window reads a copy made in it as its own before it leaves the screen")
         let panelClipboardSource = (try? String(
-            contentsOfFile: "Sources/Vorssaint/UI/MenuPanel/PanelClipboardView.swift",
+            contentsOfFile: "Sources/OSADesktop/UI/MenuPanel/PanelClipboardView.swift",
             encoding: .utf8)) ?? ""
         suite.expect(panelClipboardSource.contains("if inNotch { confirmClearAboveIsland(ids) } else { clearingIDs = ids }")
                      && panelClipboardSource.contains("NSAlert.confirmAboveIsland("),

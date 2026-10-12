@@ -152,7 +152,7 @@ enum PreferencesFeatureTests {
                "keep awake shortcut defaults to Ctrl+Opt+Cmd+K")
         suite.expect(registeredDefaults[DefaultsKey.keepAwakeIconTint] as? String == KeepAwakeIconTint.orange.rawValue,
                "keep-awake active icon tint defaults to orange")
-        suite.expect(registeredDefaults[DefaultsKey.keepAwakeActiveIcon] as? String == KeepAwakeActiveIcon.vorssaint.rawValue,
+        suite.expect(registeredDefaults[DefaultsKey.keepAwakeActiveIcon] as? String == KeepAwakeActiveIcon.osaDesktop.rawValue,
                "keep-awake active icon defaults to the OSA Desktop glyph")
         suite.expect(registeredDefaults[DefaultsKey.keepAwakeMouseJiggleEnabled] as? Bool == false,
                "Keep Awake mouse movement is opt-in")
@@ -168,7 +168,7 @@ enum PreferencesFeatureTests {
                "invalid keep-awake active icon tint falls back to orange")
         suite.expect(Defaults.sanitizedKeepAwakeActiveIcon("coffee") == .coffee,
                "valid keep-awake active icon is preserved")
-        suite.expect(Defaults.sanitizedKeepAwakeActiveIcon("bad") == .vorssaint,
+        suite.expect(Defaults.sanitizedKeepAwakeActiveIcon("bad") == .osaDesktop,
                "invalid keep-awake active icon falls back to the OSA Desktop glyph")
         suite.expect(KeepAwakeActiveIcon.eye.systemSymbolName == "eye.fill",
                "keep-awake eye option maps to its menu bar symbol")
@@ -306,7 +306,7 @@ enum PreferencesFeatureTests {
             automaticSessionActive: true
         ) == .none, "the same unplug leaves an Any session running, which is why All exists")
         let automationEditor = (try? String(
-            contentsOfFile: "Sources/Vorssaint/UI/KeepAwakeAutomationView.swift",
+            contentsOfFile: "Sources/OSADesktop/UI/KeepAwakeAutomationView.swift",
             encoding: .utf8)) ?? ""
         suite.expect(automationEditor.contains(".pickerStyle(.segmented)")
                 && automationEditor.contains(".controlSize(compact ? .small : .regular)"),

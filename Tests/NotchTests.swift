@@ -1449,7 +1449,7 @@ enum NotchTests {
                      "the keyboard light level is opt-in and follows the brightness feature")
         suite.expect(lightNeedsHardware,
                      "a level restored from a Mac with a keyboard light stays out of an island without one")
-        let launch = (try? String(contentsOfFile: "Sources/Vorssaint/main.swift", encoding: .utf8)) ?? ""
+        let launch = (try? String(contentsOfFile: "Sources/OSADesktop/main.swift", encoding: .utf8)) ?? ""
         suite.expect(launch.contains("NotchControlItem.keyboardLightIsSupported = { BrightnessService.keyboardLightIsSupported }"),
                      "launch asks the brightness service whether this Mac has a keyboard light")
         suite.expect(NotchLayout.levelCardsShowDetails([.volume, .brightness], height: 96)
@@ -1458,8 +1458,8 @@ enum NotchTests {
                      && !NotchLayout.levelCardsShowDetails([.brightness, .keyboardLight], height: 96)
                      && !NotchLayout.levelCardsShowDetails([.volume, .brightness, .keyboardLight], height: 96),
                      "level cards fold to their readouts beside the keyboard light and three across")
-        let controlsView = (try? String(contentsOfFile: "Sources/Vorssaint/UI/Notch/NotchControlsView.swift", encoding: .utf8)) ?? ""
-        let layoutEditor = (try? String(contentsOfFile: "Sources/Vorssaint/UI/Settings/NotchLayoutEditor.swift", encoding: .utf8)) ?? ""
+        let controlsView = (try? String(contentsOfFile: "Sources/OSADesktop/UI/Notch/NotchControlsView.swift", encoding: .utf8)) ?? ""
+        let layoutEditor = (try? String(contentsOfFile: "Sources/OSADesktop/UI/Settings/NotchLayoutEditor.swift", encoding: .utf8)) ?? ""
         suite.expect(controlsView.contains("let details = NotchLayout.levelCardsShowDetails(levels, height: height)")
                      && controlsView.contains("level(item, style: .card, showsDevice: details)")
                      && layoutEditor.contains("let details = NotchLayout.levelCardsShowDetails(levels, height: height)")
@@ -2896,7 +2896,7 @@ enum NotchTests {
                    && label.contains("52") && !words.isEmpty,
                    "VoiceOver reads a row's week number as that week in \(language.rawValue)")
         }
-        let monthView = (try? String(contentsOfFile: "Sources/Vorssaint/UI/Notch/NotchCalendarMonthView.swift",
+        let monthView = (try? String(contentsOfFile: "Sources/OSADesktop/UI/Notch/NotchCalendarMonthView.swift",
                                      encoding: .utf8)) ?? ""
         let weekNumberView = monthView.components(separatedBy: "struct NotchCalendarWeekNumber: View {").last ?? ""
         suite.expect(monthView.components(separatedBy: "NotchCalendarWeekNumber(date: date, text: text,").count == 3

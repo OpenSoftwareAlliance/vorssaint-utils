@@ -263,7 +263,7 @@ enum UpdateFeatureTests {
         // that delegate's deinit is what deletes the scratch file, so the
         // release path has to invalidate the session too.
         let showcaseSource = (try? String(
-            contentsOfFile: "Sources/Vorssaint/Services/Update/UpdateShowcaseMedia.swift",
+            contentsOfFile: "Sources/OSADesktop/Services/Update/UpdateShowcaseMedia.swift",
             encoding: .utf8)) ?? ""
         let showcaseDeinitBody = (showcaseSource.components(separatedBy: "\n    deinit {")
             .dropFirst().first ?? "").components(separatedBy: "\n    }").first ?? ""
@@ -954,7 +954,7 @@ enum UpdateFeatureTests {
                    appPath: "/private/var/folders/ab/xyz/T/AppTranslocation/1F2/d/OSA Desktop.app",
                    volumeIsReadOnly: { _ in false }),
                "translocated apps are flagged as not updatable in place")
-        suite.expect(UpdateInstallerSupport.runsFromImmutableLocation(appPath: "/Volumes/Vorssaint/OSA Desktop.app",
+        suite.expect(UpdateInstallerSupport.runsFromImmutableLocation(appPath: "/Volumes/OSADesktop/OSA Desktop.app",
                                                                 volumeIsReadOnly: { _ in true }),
                "apps on a read-only volume (the DMG) are flagged as not updatable in place")
         suite.expect(!UpdateInstallerSupport.runsFromImmutableLocation(appPath: "/Volumes/ExternalSSD/OSA Desktop.app",
@@ -995,7 +995,7 @@ enum UpdateFeatureTests {
                "elevated marker writes drop to the original user's credentials")
         let elevated = UpdateInstallerSupport.elevatedInstallCommand(
             appPath: "/Applications/OSA Desktop.app",
-            dmgPath: "/tmp/Vorssaint-update.dmg",
+            dmgPath: "/tmp/OSADesktop-update.dmg",
             pid: 123,
             resultPath: "/tmp/result",
             uid: 501,
@@ -1021,7 +1021,7 @@ enum UpdateFeatureTests {
         // is the payload's own. Every `exit 1` inside the installer script would
         // otherwise start the whole installer a second time, as root.
         let detachRoot = FileManager.default.temporaryDirectory
-            .appendingPathComponent("VorssaintDetachTests-\(UUID().uuidString)")
+            .appendingPathComponent("OSADesktopDetachTests-\(UUID().uuidString)")
         try? FileManager.default.createDirectory(at: detachRoot, withIntermediateDirectories: true)
         let detachPayload = detachRoot.appendingPathComponent("payload.sh")
         let detachLedger = detachRoot.appendingPathComponent("runs")
@@ -1065,7 +1065,7 @@ enum UpdateFeatureTests {
         // the same. 0/1/2 must still be open (on /dev/null), or the child's
         // first open() takes stdout's slot.
         let fdRoot = FileManager.default.temporaryDirectory
-            .appendingPathComponent("VorssaintDetachFDTests-\(UUID().uuidString)")
+            .appendingPathComponent("OSADesktopDetachFDTests-\(UUID().uuidString)")
         try? FileManager.default.createDirectory(at: fdRoot, withIntermediateDirectories: true)
         let fdHolder = fdRoot.appendingPathComponent("holder")
         let fdReport = fdRoot.appendingPathComponent("report")
@@ -1144,8 +1144,8 @@ enum UpdateFeatureTests {
                "the beta channel offers the hotfix while the stable channel ignores it")
 
         // Release candidate selection
-        let dummyDMG = URL(string: "https://github.com/OpenSoftwareAlliance/osa-desktop/releases/download/v3.3.4/Vorssaint.dmg")!
-        let dummyBetaDMG = URL(string: "https://github.com/OpenSoftwareAlliance/osa-desktop/releases/download/v3.3.4-beta.1/Vorssaint.dmg")!
+        let dummyDMG = URL(string: "https://github.com/OpenSoftwareAlliance/osa-desktop/releases/download/v3.3.4/OSADesktop.dmg")!
+        let dummyBetaDMG = URL(string: "https://github.com/OpenSoftwareAlliance/osa-desktop/releases/download/v3.3.4-beta.1/OSADesktop.dmg")!
 
         let candidateList = [
             UpdateServiceSupport.ReleaseCandidate(tagName: "v3.3.4-beta.1", isPrerelease: true, isDraft: false, dmgURL: dummyBetaDMG, dmgExpectedBytes: 1000, body: "Beta notes"),
@@ -1237,7 +1237,7 @@ enum UpdateFeatureTests {
         // what the service does with the third state is pinned by source. Both
         // needles are public symbols, not a line's spelling.
         let launchAtLoginSource = (try? String(
-            contentsOfFile: "Sources/Vorssaint/Services/LaunchAtLogin.swift",
+            contentsOfFile: "Sources/OSADesktop/Services/LaunchAtLogin.swift",
             encoding: .utf8)) ?? ""
         suite.expect(launchAtLoginSource.contains(".requiresApproval"),
                "an approval-pending login item is read as its own state")
@@ -1265,7 +1265,7 @@ enum UpdateFeatureTests {
         ![Menu bar temperature metrics](Resources/Images/menu-bar-temperature-metrics.png)
 
         ### Website
-        - Official site: [vorssaint.com](https://osa.better-web.org).
+        - Official site: [osaDesktop.com](https://osa.better-web.org).
 
         ## [2.17.1] - 2026-06-17
 
@@ -1471,9 +1471,9 @@ enum UpdateFeatureTests {
         suite.expect(packageRows.allSatisfy { $0.canInstallInPlace },
                "package rows can be installed on the spot")
         let ownPackageRows = AppUpdatesSupport.packageUpdates(
-            outdated: [caskUpdate("vorssaint", installed: "3.1.12", current: "3.2.0")],
+            outdated: [caskUpdate("osa-desktop", installed: "3.1.12", current: "3.2.0")],
             installed: [],
-            ignoredTokens: ["vorssaint"],
+            ignoredTokens: ["osa-desktop"],
             apps: [])
         suite.expect(ownPackageRows.isEmpty,
                "the app update list never offers to replace OSA Desktop through its own package")

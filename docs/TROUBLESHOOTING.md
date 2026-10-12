@@ -67,12 +67,12 @@ starts your login shell once per launch, the way Terminal does, which reads
 `~/.zprofile` and `~/.zshrc`. Because OSA Desktop starts it, a startup file that
 reads a protected folder asks for access in OSA Desktop's name.
 
-During that run `VORSSAINT_RESOLVING_ENVIRONMENT` is set to `1`. A startup file
+During that run `OSA_DESKTOP_RESOLVING_ENVIRONMENT` is set to `1`. A startup file
 can check it to skip work that only makes sense in a terminal window, such as
 starting a multiplexer or a slow prompt:
 
 ```sh
-[[ -n $VORSSAINT_RESOLVING_ENVIRONMENT ]] && return
+[[ -n $OSA_DESKTOP_RESOLVING_ENVIRONMENT ]] && return
 ```
 
 ## Resetting permissions
@@ -124,7 +124,7 @@ A clear report gets fixed faster. Try to include the following.
 If you have a build from source, the self test prints a quick health summary that is handy to paste in.
 
 ```sh
-./build/Vorssaint --selftest
+./build/OSADesktop --selftest
 ```
 
 Open a report from the [new issue](https://github.com/OpenSoftwareAlliance/osa-desktop/issues/new/choose) page, and see [support](../SUPPORT.md) for every way to get help.
