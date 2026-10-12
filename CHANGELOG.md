@@ -6,14 +6,14 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
-### OSA Desktop
-OSA Desktop: fork of Vorssaint rebranded (spec 001)
-
 ### Summary
 Dynamic Island finds lyrics across more catalog variations, shows the active audio output in volume feedback and announces keyboard layout changes. Mouse navigation handles quick direction changes and apps with their own side-button controls, and Command Bar counts leap-day dates correctly.
 
 ### Added
 - Dynamic Island can show the keyboard input source when it changes. Command Bar's temporary layout switches stay quiet. Settings → Dynamic Island → Activity → Indicators.
+
+### Changed
+- OSA Desktop: fork of Vorssaint rebranded (spec 001)
 
 ### Fixed
 - Lyrics lookup handles differences in titles, albums and artist credits, using bounded searches and verified artist aliases while rejecting incompatible recordings and unknown collaborators.
