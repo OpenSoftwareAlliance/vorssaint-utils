@@ -53,8 +53,9 @@ enum UpdateAdminInstallContract {
             ExtraBrightnessService.shared.onScreen = true
             AdminShell.answer = nil
             let service = Service()
-            service.launchAdminInstaller(appPath: "/Applications/Vorssaint.app", dmgPath: "/tmp/update.dmg",
-                                         pid: 42, resultPath: "/tmp/update-result", expectedVersion: "9.9.9")
+            service.launchAdminInstaller(appPath: "/Applications/OSA Desktop.app", dmgPath: "/tmp/update.dmg",
+                                         pid: 42, resultPath: "/tmp/update-result", expectedVersion: "9.9.9",
+                                         teamID: "ABCDE12345")
             suite.expect(events == ["prompt"],
                          "the brightness overlay leaves the screen before the prompt holds the main thread")
             AdminShell.answer?(granted)

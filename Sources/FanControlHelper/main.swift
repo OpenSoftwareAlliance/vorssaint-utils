@@ -8,8 +8,8 @@ import os
 private let log = Logger(subsystem: FanControlIdentifiers.helperID, category: "FanControl")
 
 private final class FanControlOwnership {
-    private let lockPath = "/var/run/vorssaint-fan-control.lock"
-    private let markerPath = "/var/run/vorssaint-fan-control.active"
+    private let lockPath = "/var/run/osa-desktop-fan-control.lock"
+    private let markerPath = "/var/run/osa-desktop-fan-control.active"
     private var lockFile: Int32 = -1
 
     var isHeld: Bool { lockFile >= 0 }
@@ -82,7 +82,7 @@ private final class FanControlOwnership {
 
 private final class FanControlController {
     private let log = Logger(subsystem: FanControlIdentifiers.helperID, category: "FanControl")
-    private let queue = DispatchQueue(label: "com.vorssaint.fan-control.helper")
+    private let queue = DispatchQueue(label: "org.better-web.osa.fan-control.helper")
     private let ownership = FanControlOwnership()
     private var hardware: FanControlHardware?
     private var owner: UUID?
@@ -595,10 +595,15 @@ guard geteuid() == 0 else {
     exit(EXIT_FAILURE)
 }
 
+guard let appRequirement = FanControlIdentifiers.appCodeRequirement else {
+    log.error("No signing team configured; refusing to serve clients")
+    exit(EXIT_FAILURE)
+}
+
 private let controller = FanControlController()
 private let delegate = FanControlListenerDelegate(controller: controller)
 private let listener = NSXPCListener(machServiceName: FanControlIdentifiers.helperID)
-listener.setConnectionCodeSigningRequirement(FanControlIdentifiers.appCodeRequirement)
+listener.setConnectionCodeSigningRequirement(appRequirement)
 listener.delegate = delegate
 listener.activate()
 

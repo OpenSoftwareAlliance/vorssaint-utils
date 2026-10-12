@@ -197,7 +197,7 @@ enum FeatureCatalogTests {
         // 2s window made the gesture impossible for anyone pressing Escape
         // slower than once per two seconds (#697).
         let cleaningSource = (try? String(
-            contentsOfFile: "Sources/Vorssaint/Services/CleaningMode/CleaningModeManager.swift",
+            contentsOfFile: "Sources/OSADesktop/Services/CleaningMode/CleaningModeManager.swift",
             encoding: .utf8)) ?? ""
         let cleaningCode = cleaningSource
             .components(separatedBy: "\n")
@@ -520,7 +520,7 @@ enum FeatureCatalogTests {
         suite.expect(AppFeature.switcher.availabilityKey == "featureAvailable.switcher",
                "availability key derives from the raw value")
 
-        let installSuiteName = "com.vorssaint.tests.feature-install.\(UUID().uuidString)"
+        let installSuiteName = "org.better-web.osa.tests.feature-install.\(UUID().uuidString)"
         if let installDefaults = UserDefaults(suiteName: installSuiteName) {
             func savedValues() -> [String: Any] {
                 installDefaults.persistentDomain(forName: installSuiteName) ?? [:]
@@ -553,7 +553,7 @@ enum FeatureCatalogTests {
         } else {
             suite.expect(false, "feature install defaults suite can be created")
         }
-        let runtimeSource = (try? String(contentsOfFile: "Sources/Vorssaint/App/FeatureRuntime.swift",
+        let runtimeSource = (try? String(contentsOfFile: "Sources/OSADesktop/App/FeatureRuntime.swift",
                                          encoding: .utf8)) ?? ""
         suite.expect(runtimeSource.contains(
             "setAvailable(AppFeature.allCases, available, enablingFirstInstalls: false)"),
@@ -590,7 +590,7 @@ enum FeatureCatalogTests {
                 && (AppFeature.availabilityDefaults[AppFeature.fanControl.availabilityKey] as? Bool) == false
                 && (AppFeature.availabilityDefaults[AppFeature.notchMascot.availabilityKey] as? Bool) == false,
                "features added after the list was frozen wait on the Features page instead of installing themselves")
-        let linearScrollSuiteName = "com.vorssaint.tests.linear-scroll-availability.\(UUID().uuidString)"
+        let linearScrollSuiteName = "org.better-web.osa.tests.linear-scroll-availability.\(UUID().uuidString)"
         if let linearDefaults = UserDefaults(suiteName: linearScrollSuiteName) {
             Defaults.migrateLinearScrollAvailability(in: linearDefaults)
             suite.expect(linearDefaults.object(forKey: AppFeature.linearScroll.availabilityKey) == nil,
@@ -608,7 +608,7 @@ enum FeatureCatalogTests {
             suite.expect(false, "linear scrolling availability suite can be created")
         }
 
-        let watchSuiteName = "com.vorssaint.tests.notch-watch-availability.\(UUID().uuidString)"
+        let watchSuiteName = "org.better-web.osa.tests.notch-watch-availability.\(UUID().uuidString)"
         if let watchDefaults = UserDefaults(suiteName: watchSuiteName) {
             Defaults.migrateNotchWatchAvailability(in: watchDefaults)
             suite.expect(watchDefaults.object(forKey: AppFeature.notchWatch.availabilityKey) == nil,
@@ -663,7 +663,7 @@ enum FeatureCatalogTests {
                "an uninstalled feature is never offered")
         // The scroll axes migration saves the horizontal switch on every Mac
         // at launch, before any registered default exists.
-        let migratedAxesSuiteName = "com.vorssaint.tests.never-switched-on.\(UUID().uuidString)"
+        let migratedAxesSuiteName = "org.better-web.osa.tests.never-switched-on.\(UUID().uuidString)"
         if let migratedAxesDefaults = UserDefaults(suiteName: migratedAxesSuiteName) {
             Defaults.migrateScrollInverterAxes(in: migratedAxesDefaults)
             let migrated = migratedAxesDefaults.persistentDomain(forName: migratedAxesSuiteName) ?? [:]
@@ -677,7 +677,7 @@ enum FeatureCatalogTests {
         }
         suite.expect(SettingsBackupSupport.exportKeys().contains(DefaultsKey.featureHubKeptFeatures),
                "features someone chose to keep travel in backups, so a restored Mac never offers them again")
-        let hubUndoSource = (try? String(contentsOfFile: "Sources/Vorssaint/UI/Settings/FeatureHubSettings.swift",
+        let hubUndoSource = (try? String(contentsOfFile: "Sources/OSADesktop/UI/Settings/FeatureHubSettings.swift",
                                          encoding: .utf8)) ?? ""
         suite.expect(hubUndoSource.contains("setAvailable(batch, true, enablingFirstInstalls: false)"),
                "undoing the offer reinstalls without switching on what was never on")
@@ -711,7 +711,7 @@ enum FeatureCatalogTests {
             "appManagement", "calendar",
         ], "permission portal contains every supported permission")
         let onboardingViewSource = (try? String(
-            contentsOfFile: "Sources/Vorssaint/UI/Onboarding/OnboardingView.swift",
+            contentsOfFile: "Sources/OSADesktop/UI/Onboarding/OnboardingView.swift",
             encoding: .utf8)) ?? ""
         let additionalPermissionsAlignment =
             #"DisclosureGroup\(isExpanded: \$showingOtherPermissions\) \{\s+"#
@@ -752,10 +752,10 @@ enum FeatureCatalogTests {
                "no first-run preset installs a feature whose hardware the Mac may lack")
 
         let featureHubSource = (try? String(
-            contentsOfFile: "Sources/Vorssaint/UI/Settings/FeatureHubSettings.swift",
+            contentsOfFile: "Sources/OSADesktop/UI/Settings/FeatureHubSettings.swift",
             encoding: .utf8)) ?? ""
         let onboardingFeatureSource = (try? String(
-            contentsOfFile: "Sources/Vorssaint/UI/Onboarding/OnboardingView.swift",
+            contentsOfFile: "Sources/OSADesktop/UI/Onboarding/OnboardingView.swift",
             encoding: .utf8)) ?? ""
         suite.expect(featureHubSource.contains("installBlockedReason")
                 && onboardingFeatureSource.contains("installBlockedReason"),
@@ -1215,7 +1215,7 @@ enum FeatureCatalogTests {
                 && decodedLegacyFanSnapshot?.temperatures == nil,
                "fan snapshots remain compatible with an older installed helper")
 
-        let fanMigrationSuite = "com.vorssaint.tests.fan-migration.\(UUID().uuidString)"
+        let fanMigrationSuite = "org.better-web.osa.tests.fan-migration.\(UUID().uuidString)"
         if let fanMigration = UserDefaults(suiteName: fanMigrationSuite) {
             fanMigration.set(true, forKey: DefaultsKey.monitorShowFanControlBeta)
             Defaults.migrateFanControlVisibility(in: fanMigration)
@@ -1638,8 +1638,12 @@ enum FeatureCatalogTests {
                "WindowServer is protected")
         suite.expect(KillProcessSupport.isProtected(pid: 9999, name: "loginwindow", path: "/System/Library/CoreServices/loginwindow.app/Contents/MacOS/loginwindow"),
                "loginwindow is protected")
-        suite.expect(KillProcessSupport.isProtected(pid: ProcessInfo.processInfo.processIdentifier, name: "Vorssaint"),
+        suite.expect(KillProcessSupport.isProtected(pid: ProcessInfo.processInfo.processIdentifier, name: "OSA Desktop"),
                "current app PID is protected")
+        for appName in ["OSADesktop", "OSA Desktop", "OSA Desktop (Developer)", "OSADesktopDeveloper"] {
+            suite.expect(KillProcessSupport.isProtected(pid: 12345, name: appName),
+                   "own process name is protected: \(appName)")
+        }
         suite.expect(!KillProcessSupport.isProtected(pid: 12345, name: "Safari", path: "/Applications/Safari.app/Contents/MacOS/Safari"),
                "ordinary user app is not protected")
         suite.expect(KillProcessSupport.numberComesBefore(90, 10, lhsPID: 2, rhsPID: 1,
@@ -1774,7 +1778,7 @@ enum FeatureCatalogTests {
                    !$0.permissions.contains(.accessibility)
                },
                "battery and quiet needs no accessibility permission at all")
-        let firstRunSuiteName = "com.vorssaint.tests.first-run.\(UUID().uuidString)"
+        let firstRunSuiteName = "org.better-web.osa.tests.first-run.\(UUID().uuidString)"
         if let firstRunDefaults = UserDefaults(suiteName: firstRunSuiteName) {
             firstRunDefaults.register(defaults: AppFeature.availabilityDefaults)
             FeaturePreset.prepareFirstRunAvailability(in: firstRunDefaults)
@@ -2237,7 +2241,7 @@ enum FeatureCatalogTests {
         // AppKit reached from below the line would be a main thread violation
         // on every hotplug, wake and panel open.
         let brightnessSource = (try? String(
-            contentsOfFile: "Sources/Vorssaint/Services/Display/BrightnessService.swift",
+            contentsOfFile: "Sources/OSADesktop/Services/Display/BrightnessService.swift",
             encoding: .utf8)) ?? ""
         let brightnessWorkQueueHalf = brightnessSource
             .components(separatedBy: "// MARK: - Rebuild (work queue)").last ?? ""
@@ -2424,8 +2428,8 @@ enum FeatureCatalogTests {
                 && !SettingsBackupSupport.exportKeys().contains(
                     DefaultsKey.brightnessExtendedDimmingPaths),
                "the per-monitor extended dimming choice stays on this Mac")
-        for surface in ["Sources/Vorssaint/UI/Settings/EnergySettings.swift",
-                        "Sources/Vorssaint/UI/MenuPanel/BrightnessSection.swift"] {
+        for surface in ["Sources/OSADesktop/UI/Settings/EnergySettings.swift",
+                        "Sources/OSADesktop/UI/MenuPanel/BrightnessSection.swift"] {
             let source = (try? String(contentsOfFile: surface, encoding: .utf8)) ?? ""
             suite.expect(source.contains("SoftwareDimmingButton(display: display"),
                    "\(surface) offers the software dimming choice on its display rows")

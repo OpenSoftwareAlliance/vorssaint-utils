@@ -265,55 +265,15 @@ enum LocalizationFeatureContractTests {
             ]
             suite.expect(officialHomebrewIntroStrings.allSatisfy { !$0.isEmpty },
                    "\(prefix) official Homebrew intro is complete")
-            let supportCommunityStrings = [
-                strings.donateHeading,
-                strings.donateMessage,
-                strings.donateButton,
+            let supportStrings = [
                 strings.supportIntroTitle,
-                strings.supportIntroMessage,
                 strings.supportIntroStarButton,
                 strings.supportIntroStarMessage,
-                strings.supportIntroCoffeeButton,
-                strings.discordIntroTitle,
-                strings.discordIntroMessage,
-                strings.discordIntroJoinButton,
-                strings.communityIntroTitle,
-                strings.communityIntroMessage,
-                strings.communityIntroFollowButton,
             ]
-            suite.expect(supportCommunityStrings.allSatisfy { !$0.isEmpty && !$0.contains("—") },
+            suite.expect(supportStrings.allSatisfy { !$0.isEmpty && !$0.contains("—") },
                    "\(prefix) support and community strings are complete without em dash")
-            suite.expect(strings.donateButton.contains("Buy Me a Coffee")
-                   && strings.supportIntroCoffeeButton.contains("Buy Me a Coffee"),
-                   "\(prefix) financial support points only to Buy Me a Coffee")
-            suite.expect(strings.supportIntroStarMessage.localizedCaseInsensitiveContains("GitHub")
-                   && strings.discordIntroJoinButton.localizedCaseInsensitiveContains("Discord"),
-                   "\(prefix) non-financial support and community actions name their destinations")
-            suite.expect(strings.discordIntroMessage.count <= 320,
-                   "\(prefix) Discord introduction stays concise")
-            suite.expect(!strings.communityIntroMessage.isEmpty
-                   && strings.communityIntroMessage.contains("X"),
-                   "\(prefix) community intro invites users to follow previews on X")
-            let retiredWeeklyPhrases = [
-                "uma vez por semana", "once a week", "haftada bir", "раз в неделю",
-                "una vez por semana", "einmal pro Woche", "une fois par semaine",
-                "una volta a settimana", "週1回", "매주 한 번", "每周更新一次", "每週更新一次",
-            ]
-            suite.expect(retiredWeeklyPhrases.allSatisfy {
-                !strings.communityIntroMessage.localizedCaseInsensitiveContains($0)
-            }, "\(prefix) community intro no longer promises weekly updates")
-            suite.expect(!strings.communityIntroMessage.contains("—")
-                   && strings.communityIntroMessage.count <= 320,
-                   "\(prefix) community intro stays concise and has no em dash")
-            if language == .enUS {
-                suite.expect(strings.discordIntroMessage.contains("new")
-                       && strings.discordIntroMessage.contains("still being built"),
-                       "English Discord introduction says the community is new and in development")
-            } else if language == .ptBR {
-                suite.expect(strings.discordIntroMessage.contains("nova")
-                       && strings.discordIntroMessage.contains("em desenvolvimento"),
-                       "Portuguese Discord introduction says the community is new and in development")
-            }
+            suite.expect(strings.supportIntroStarMessage.localizedCaseInsensitiveContains("GitHub"),
+                   "\(prefix) non-financial support action names its destination")
             suite.expect(!strings.updateShowcaseTitle.isEmpty, "\(prefix) update showcase title is present")
             suite.expect(!strings.updateShowcaseMessage.isEmpty, "\(prefix) update showcase message is present")
             suite.expect(!strings.updateShowcaseUnavailable.isEmpty, "\(prefix) update showcase fallback is present")
@@ -362,7 +322,7 @@ enum LocalizationFeatureContractTests {
         suite.expect(bundleLocalizations.contains("tr"), "Info.plist declares Turkish as a bundle localization")
         suite.expect(bundleLocalizations.contains("ko"), "Info.plist declares Korean as a bundle localization")
         let baseAudioPrompt = infoPlist?["NSAudioCaptureUsageDescription"] as? String ?? ""
-        suite.expect(baseAudioPrompt.contains("Vorssaint uses each app's audio"),
+        suite.expect(baseAudioPrompt.contains("OSA Desktop uses each app's audio"),
                "base audio permission prompt is an English fallback")
         let organizerFolderPromptKeys = [
             "NSDesktopFolderUsageDescription", "NSDocumentsFolderUsageDescription",
@@ -399,10 +359,10 @@ enum LocalizationFeatureContractTests {
         // that is registered under the other name, and fan control would just
         // never answer.
         let helperTemplate = (try? String(
-            contentsOfFile: "Resources/com.vorssaint.utils.fan-control.plist",
+            contentsOfFile: "Resources/org.better-web.osa.desktop.fan-control.plist",
             encoding: .utf8)) ?? ""
         suite.expect(!helperTemplate.isEmpty, "the helper template reads back")
-        let releaseHelperID = "com.vorssaint.utils.fan-control"
+        let releaseHelperID = "org.better-web.osa.desktop.fan-control"
         let mentions = helperTemplate.components(separatedBy: releaseHelperID).count - 1
         suite.expect(mentions == 3,
                "the helper template names the release service exactly where the build rewrites it (\(mentions))")

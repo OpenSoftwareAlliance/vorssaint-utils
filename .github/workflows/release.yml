@@ -1,6 +1,12 @@
+# Release setup: set the repository or organization variable OSA_RELEASE_ACTORS
+# to a JSON array of the GitHub logins allowed to release (e.g. ["matbrgz"]).
+# While it is unset, no release job runs. Signing and notarization secrets live
+# in the `release` environment, where required reviewers can be configured.
 name: Release
 
-# Only an owner-created version tag can reach the protected signing job. The
+# Only a version tag pushed by an actor listed in OSA_RELEASE_ACTORS can start
+# a release (both the actor and the triggering actor are checked), and the
+# signing job additionally waits for approval of the `release` environment. The
 # preflight runs without release credentials and proves that the tag names a
 # verified commit already present on main before the environment can be approved.
 on:
@@ -17,11 +23,12 @@ jobs:
   preflight:
     name: Verify trusted release ref
     if: >-
-      github.repository == 'vorssaint/vorssaint-utils' &&
+      startsWith(github.repository, 'OpenSoftwareAlliance/') &&
       github.event_name == 'push' &&
       github.ref_type == 'tag' &&
-      github.actor == 'vorssaint' &&
-      github.triggering_actor == 'vorssaint'
+      github.repository_owner == 'OpenSoftwareAlliance' &&
+      contains(fromJSON(vars.OSA_RELEASE_ACTORS || '[]'), github.actor) &&
+      contains(fromJSON(vars.OSA_RELEASE_ACTORS || '[]'), github.triggering_actor)
     runs-on: macos-26
     timeout-minutes: 30
     permissions:
@@ -74,14 +81,19 @@ jobs:
     needs: preflight
     if: >-
       needs.preflight.result == 'success' &&
-      github.repository == 'vorssaint/vorssaint-utils' &&
+      startsWith(github.repository, 'OpenSoftwareAlliance/') &&
       github.event_name == 'push' &&
       github.ref_type == 'tag' &&
-      github.actor == 'vorssaint' &&
-      github.triggering_actor == 'vorssaint'
+      github.repository_owner == 'OpenSoftwareAlliance' &&
+      contains(fromJSON(vars.OSA_RELEASE_ACTORS || '[]'), github.actor) &&
+      contains(fromJSON(vars.OSA_RELEASE_ACTORS || '[]'), github.triggering_actor)
     runs-on: macos-26
     timeout-minutes: 30
-    environment: release-signing
+    environment: release
+    env:
+      # Signing, notarization and verification run only when a team is
+      # configured; otherwise the DMG is built unsigned.
+      OSA_TEAM_ID: ${{ secrets.OSA_TEAM_ID }}
     outputs:
       commit_sha: ${{ steps.source.outputs.commit_sha }}
       prerelease: ${{ steps.notes.outputs.prerelease }}
@@ -112,7 +124,12 @@ jobs:
           fi
           echo "commit_sha=$COMMIT_SHA" >> "$GITHUB_OUTPUT"
 
+      - name: Announce unsigned build
+        if: ${{ env.OSA_TEAM_ID == '' }}
+        run: echo "::notice::OSA_TEAM_ID not set; publishing an unsigned build"
+
       - name: Set up signing
+        if: ${{ env.OSA_TEAM_ID != '' }}
         env:
           REQUIRE_SIGNING: "1"
           SIGNING_CERT_P12: ${{ secrets.SIGNING_CERT_P12 }}
@@ -123,33 +140,43 @@ jobs:
         run: ./build.sh
 
       - name: Verify release signature
+        if: ${{ env.OSA_TEAM_ID != '' }}
         run: |
-          REQUIREMENT='identifier "com.vorssaint.utils" and anchor apple generic and certificate leaf[subject.OU] = "3D485NHW29"'
-          codesign --verify --deep --strict -R="$REQUIREMENT" build/stage/Vorssaint.app
+          REQUIREMENT="identifier \"org.better-web.osa.desktop\" and anchor apple generic and certificate leaf[subject.OU] = \"$OSA_TEAM_ID\""
+          codesign --verify --deep --strict -R="$REQUIREMENT" "build/stage/OSA Desktop.app"
 
       - name: Selftest
-        run: ./build/Vorssaint --selftest
+        run: ./build/OSADesktop --selftest
 
       - name: Notarize app
+        if: ${{ env.OSA_TEAM_ID != '' }}
         env:
           REQUIRE_NOTARIZATION: "1"
           NOTARY_API_KEY_P8: ${{ secrets.NOTARY_API_KEY_P8 }}
           NOTARY_KEY_ID: ${{ secrets.NOTARY_KEY_ID }}
           NOTARY_ISSUER_ID: ${{ secrets.NOTARY_ISSUER_ID }}
-        run: ./Tools/notarize.sh build/stage/Vorssaint.app
+        run: ./Tools/notarize.sh "build/stage/OSA Desktop.app"
 
       - name: Package DMG
         run: ./Tools/make-dmg.sh
 
       - name: Sign DMG
+        if: ${{ env.OSA_TEAM_ID != '' }}
         run: |
           DMG=$(ls dist/*.dmg | head -1)
-          codesign --force --timestamp \
-            --sign 'Developer ID Application: Pedro Gomes (3D485NHW29)' "$DMG"
-          REQUIREMENT='anchor apple generic and certificate leaf[subject.OU] = "3D485NHW29"'
+          IDENTITY="$(security find-identity -v -p codesigning \
+            | grep "Developer ID Application" | grep "($OSA_TEAM_ID)" | head -1 \
+            | sed -E 's/.*"(.*)".*/\1/')"
+          if [[ -z "$IDENTITY" ]]; then
+            echo "No Developer ID Application identity for team $OSA_TEAM_ID" >&2
+            exit 1
+          fi
+          codesign --force --timestamp --sign "$IDENTITY" "$DMG"
+          REQUIREMENT="anchor apple generic and certificate leaf[subject.OU] = \"$OSA_TEAM_ID\""
           codesign --verify --strict -R="$REQUIREMENT" "$DMG"
 
       - name: Notarize DMG
+        if: ${{ env.OSA_TEAM_ID != '' }}
         env:
           REQUIRE_NOTARIZATION: "1"
           NOTARY_API_KEY_P8: ${{ secrets.NOTARY_API_KEY_P8 }}
@@ -162,7 +189,7 @@ jobs:
           VERSION="${GITHUB_REF_NAME#v}"
           mkdir -p dist/showcase
           if [[ "$VERSION" == "3.1.4" ]]; then
-            ASSET="vorssaint-3.1.4-showcase-1.mp4"
+            ASSET="osa-desktop-3.1.4-showcase-1.mp4"
             SOURCE="ReleaseAssets/$ASSET"
             TARGET="dist/showcase/$ASSET"
             if [[ -f "$SOURCE" ]]; then
@@ -170,15 +197,16 @@ jobs:
             fi
             if [[ ! -s "$TARGET" ]]; then
               echo "Missing required showcase media: $TARGET" >&2
-              echo "The app expects https://github.com/vorssaint/vorssaint-utils/releases/download/v3.1.4/$ASSET" >&2
+              echo "The app expects https://github.com/OpenSoftwareAlliance/osa-desktop/releases/download/v3.1.4/$ASSET" >&2
               exit 1
             fi
           fi
 
       - name: Verify notarization
+        if: ${{ env.OSA_TEAM_ID != '' }}
         run: |
           DMG=$(ls dist/*.dmg | head -1)
-          DMG_REQUIREMENT='anchor apple generic and certificate leaf[subject.OU] = "3D485NHW29"'
+          DMG_REQUIREMENT="anchor apple generic and certificate leaf[subject.OU] = \"$OSA_TEAM_ID\""
           codesign --verify --strict -R="$DMG_REQUIREMENT" "$DMG"
           xcrun stapler validate "$DMG"
           MP=$(mktemp -d)
@@ -188,11 +216,11 @@ jobs:
           }
           trap cleanup EXIT
           hdiutil attach -nobrowse -readonly -mountpoint "$MP" "$DMG"
-          spctl -a -t exec -vv "$MP/Vorssaint.app" 2>&1 | tee /tmp/spctl.txt
+          spctl -a -t exec -vv "$MP/OSA Desktop.app" 2>&1 | tee /tmp/spctl.txt
           grep -q "source=Notarized Developer ID" /tmp/spctl.txt
-          REQUIREMENT='identifier "com.vorssaint.utils" and anchor apple generic and certificate leaf[subject.OU] = "3D485NHW29"'
-          codesign --verify --deep --strict -R="$REQUIREMENT" "$MP/Vorssaint.app"
-          xcrun stapler validate "$MP/Vorssaint.app"
+          REQUIREMENT="identifier \"org.better-web.osa.desktop\" and anchor apple generic and certificate leaf[subject.OU] = \"$OSA_TEAM_ID\""
+          codesign --verify --deep --strict -R="$REQUIREMENT" "$MP/OSA Desktop.app"
+          xcrun stapler validate "$MP/OSA Desktop.app"
 
       - name: Release notes from CHANGELOG
         id: notes
@@ -207,7 +235,11 @@ jobs:
           {
             printf '%s\n' "$NOTES"
             echo ""
-            echo "Signed with an Apple Developer ID and notarized by Apple, so it downloads and opens normally. Requires macOS 14 or later. Open the .dmg below and drag Vorssaint to Applications."
+            if [[ -n "${OSA_TEAM_ID:-}" ]]; then
+              echo "Signed with an Apple Developer ID and notarized by Apple, so it downloads and opens normally. Requires macOS 14 or later. Open the .dmg below and drag OSA Desktop to Applications."
+            else
+              echo "Unsigned build: on first launch, open System Settings → Privacy & Security and click Open Anyway. Requires macOS 14 or later. Open the .dmg below and drag OSA Desktop to Applications."
+            fi
           } > "$NOTES_FILE"
           {
             echo "file=$NOTES_FILE"
@@ -252,11 +284,12 @@ jobs:
     needs: release
     if: >-
       needs.release.result == 'success' &&
-      github.repository == 'vorssaint/vorssaint-utils' &&
+      startsWith(github.repository, 'OpenSoftwareAlliance/') &&
       github.event_name == 'push' &&
       github.ref_type == 'tag' &&
-      github.actor == 'vorssaint' &&
-      github.triggering_actor == 'vorssaint'
+      github.repository_owner == 'OpenSoftwareAlliance' &&
+      contains(fromJSON(vars.OSA_RELEASE_ACTORS || '[]'), github.actor) &&
+      contains(fromJSON(vars.OSA_RELEASE_ACTORS || '[]'), github.triggering_actor)
     runs-on: macos-26
     timeout-minutes: 10
     permissions:

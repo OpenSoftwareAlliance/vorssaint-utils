@@ -12,6 +12,10 @@ Dynamic Island finds lyrics across more catalog variations, shows the active aud
 ### Added
 - Dynamic Island can show the keyboard input source when it changes. Command Bar's temporary layout switches stay quiet. Settings → Dynamic Island → Activity → Indicators.
 
+### Changed
+- OSA Desktop: fork of Vorssaint rebranded (spec 001)
+- Installing or removing OSA Desktop's closed lid rule (`/etc/sudoers.d/osa-desktop-clamshell`) also removes the legacy Vorssaint rules (`vorssaint-clamshell`, `vorssaint-utils-clamshell`, `vorss-clamshell`). If upstream Vorssaint runs side by side on the same Mac, its closed lid rule is deleted too and must be enabled again there.
+
 ### Fixed
 - Lyrics lookup handles differences in titles, albums and artist credits, using bounded searches and verified artist aliases while rejecting incompatible recordings and unknown collaborators.
 - Volume feedback uses the selected headphones or AirPods icon, including when muted or at zero volume.

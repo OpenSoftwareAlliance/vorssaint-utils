@@ -29,11 +29,22 @@ jobs:
           swiftc --version | grep -F "Apple Swift version 6.0.3"
           test "$(xcrun --sdk macosx --show-sdk-version)" = "15.2"
 
+      - name: Rebrand allowlist check
+        run: ./Tools/check-rebrand.sh
+
+      - name: Rebrand tooling is idempotent
+        run: |
+          for phase in visible internal; do
+            python3 Tools/rebrand.py --phase "$phase" --dry-run | tee /dev/stderr | tail -1 | grep -F "0 files rewritten, 0 paths moved"
+          done
+          ./Tools/test_check_rebrand.sh
+          (cd Tools && python3 -m unittest test_rebrand)
+
       - name: Build
         run: ./build.sh
 
       - name: Selftest
-        run: ./build/Vorssaint --selftest
+        run: ./build/OSADesktop --selftest
 
       - name: Unit tests
         run: ./build.sh --test
@@ -47,11 +58,22 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Rebrand allowlist check
+        run: ./Tools/check-rebrand.sh
+
+      - name: Rebrand tooling is idempotent
+        run: |
+          for phase in visible internal; do
+            python3 Tools/rebrand.py --phase "$phase" --dry-run | tee /dev/stderr | tail -1 | grep -F "0 files rewritten, 0 paths moved"
+          done
+          ./Tools/test_check_rebrand.sh
+          (cd Tools && python3 -m unittest test_rebrand)
+
       - name: Build
         run: ./build.sh
 
       - name: Selftest
-        run: ./build/Vorssaint --selftest
+        run: ./build/OSADesktop --selftest
 
       - name: Package DMG
         run: ./Tools/make-dmg.sh
