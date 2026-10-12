@@ -155,7 +155,7 @@ final class BrightnessService: ObservableObject {
     private var swallowedKeyCodes = Set<Int>()
     /// Serializes every I2C transaction and rebuild; DDC displays drop
     /// commands that interleave.
-    private let workQueue = DispatchQueue(label: "com.vorssaint.utils.brightness", qos: .userInitiated)
+    private let workQueue = DispatchQueue(label: "org.better-web.osa.desktop.brightness", qos: .userInitiated)
     private let stateLock = NSLock()
     private var routes: [CGDirectDisplayID: Route] = [:]
     private struct PendingWrite {
@@ -1262,7 +1262,7 @@ final class BrightnessService: ObservableObject {
             shouldStopFunctionKeyThread = false
             pendingFunctionKeyRestart = false
             let thread = Thread { [weak self] in self?.runFunctionKeyTap() }
-            thread.name = "Vorssaint Brightness Keys"
+            thread.name = "OSA Desktop Brightness Keys"
             thread.qualityOfService = .userInteractive
             functionKeyThread = thread
             return thread

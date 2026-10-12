@@ -29,6 +29,16 @@ class VisiblePhase(unittest.TestCase):
                          '"org.better-web.osa.tests.delayed.plist"')
         self.assertEqual(self.v("a.swift", '"com.vorssaint.utils.dev"'), '"org.better-web.osa.desktop.dev"')
 
+    def test_path_segments_left_for_internal_phase(self):
+        self.assertEqual(self.v("a.swift", '"Sources/Vorssaint/App/X.swift"'), '"Sources/Vorssaint/App/X.swift"')
+        self.assertEqual(self.v("a.md", "run `./build/Vorssaint --selftest`"), "run `./build/Vorssaint --selftest`")
+
+    def test_identifier_suffixes_left_for_internal_phase(self):
+        self.assertEqual(self.v("a.swift", '"Vorssaint.Tests.X"'), '"Vorssaint.Tests.X"')
+        self.assertEqual(self.v("a.swift", '"Vorssaint-update.dmg"'), '"Vorssaint-update.dmg"')
+        self.assertEqual(self.v("a.swift", '"Vorssaint.app"'), '"OSA Desktop.app"')
+        self.assertEqual(self.v("a.md", "Open Vorssaint. Then wait; Vorssaint-Symbol"), "Open OSA Desktop. Then wait; OSA Desktop-Symbol")
+
     def test_copyright_preserved(self):
         line = "// Copyright (C) 2026 Vorssaint"
         self.assertEqual(self.v("a.swift", line), line)

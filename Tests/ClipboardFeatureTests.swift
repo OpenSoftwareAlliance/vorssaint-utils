@@ -21,7 +21,7 @@ enum ClipboardFeatureTests {
         }
         typealias NSScreen = Screen
         enum UserDefaults {
-            static let name = "com.vorssaint.tests.clipboard-panel"
+            static let name = "org.better-web.osa.tests.clipboard-panel"
             static let standard = Foundation.UserDefaults(suiteName: name)!
         }
         var quickLayout = ClipboardHistoryLayout.cards
@@ -67,7 +67,7 @@ enum ClipboardFeatureTests {
         var candidates: Set<String> = []
         var lookup: Set<String> = []
         var historyPanelWasKey = false
-        let ownBundleID: String? = "com.vorssaint.utils"
+        let ownBundleID: String? = "org.better-web.osa.desktop"
         static var front: String?
         static func frontmostBundleID() -> String? { front }
     }
@@ -119,8 +119,8 @@ enum ClipboardFeatureTests {
                      "a copy naming an app that is not skipped is still recorded under that app")
         source.lookup = []
         source.candidates = ["com.apple.Safari"]
-        suite.expect(sourceCheck(declared: "com.vorssaint.utils").bundleID == nil,
-                     "text Vorssaint copies itself, such as recognized text, is not credited to the app in front")
+        suite.expect(sourceCheck(declared: "org.better-web.osa.desktop").bundleID == nil,
+                     "text OSA Desktop copies itself, such as recognized text, is not credited to the app in front")
         source.candidates = ["com.apple.Safari"]
         suite.expect(sourceCheck(declared: "com.apple.Notes").bundleID == "com.apple.Notes",
                      "an app that names itself on the pasteboard is believed over the app in front")
@@ -658,8 +658,8 @@ enum ClipboardFeatureTests {
         suite.expect(Defaults.registeredDefaults[DefaultsKey.clipboardHistoryLayout] as? String
                         == ClipboardHistoryLayout.list.rawValue,
                "the clipboard history opens as the list until the cards are chosen")
-        let layoutDefaults = UserDefaults(suiteName: "com.vorssaint.tests.clipboard-layout")!
-        layoutDefaults.removePersistentDomain(forName: "com.vorssaint.tests.clipboard-layout")
+        let layoutDefaults = UserDefaults(suiteName: "org.better-web.osa.tests.clipboard-layout")!
+        layoutDefaults.removePersistentDomain(forName: "org.better-web.osa.tests.clipboard-layout")
         suite.expect(ClipboardHistoryLayout.current(in: layoutDefaults) == .list,
                "an unset clipboard history layout reads as the list")
         layoutDefaults.set(ClipboardHistoryLayout.cards.rawValue, forKey: DefaultsKey.clipboardHistoryLayout)
@@ -668,7 +668,7 @@ enum ClipboardFeatureTests {
         layoutDefaults.set("grid", forKey: DefaultsKey.clipboardHistoryLayout)
         suite.expect(ClipboardHistoryLayout.current(in: layoutDefaults) == .list,
                "a layout this version does not know reads as the list")
-        layoutDefaults.removePersistentDomain(forName: "com.vorssaint.tests.clipboard-layout")
+        layoutDefaults.removePersistentDomain(forName: "org.better-web.osa.tests.clipboard-layout")
         suite.expect(ClipboardHistoryLayout.cards.sideArrowsMoveSelection
                         && !ClipboardHistoryLayout.list.sideArrowsMoveSelection,
                "side arrows walk the cards, while the list leaves them to the search field")

@@ -394,7 +394,7 @@ enum AgentUsageArchiveSettleTests {
     }
 
     class Fixture {
-        let queue = DispatchQueue(label: "com.vorssaint.agent-usage.settle-test")
+        let queue = DispatchQueue(label: "org.better-web.osa.agent-usage.settle-test")
         var saved = 0
         func saveProgress() { saved += 1 }
     }

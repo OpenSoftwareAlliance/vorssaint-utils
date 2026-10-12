@@ -81,7 +81,7 @@ enum ScreenshotSharingSupport {
         return true
     }
 
-    static let developerBundleIdentifier = "com.vorssaint.utils.dev"
+    static let developerBundleIdentifier = "org.better-web.osa.desktop.dev"
     static let maximumUploadBytes = 25 * 1_024 * 1_024
 
     /// nil when this build has no OSA share endpoint and is not a developer

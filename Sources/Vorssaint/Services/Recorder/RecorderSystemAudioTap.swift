@@ -101,17 +101,17 @@ final class RecorderSystemAudioTap: @unchecked Sendable {
     /// Destroying a device or a tap can park inside a broken audio path, so
     /// it never happens on a queue anything waits for. Serial, so the device
     /// that hosts a tap is always gone before the tap itself.
-    private static let teardownQueue = DispatchQueue(label: "com.vorssaint.recorder.systemaudio.teardown",
+    private static let teardownQueue = DispatchQueue(label: "org.better-web.osa.recorder.systemaudio.teardown",
                                                      qos: .utility)
     /// The global listener must not wait behind a device destruction that
     /// can remain stuck for the rest of the session.
-    private static let listenerQueue = DispatchQueue(label: "com.vorssaint.recorder.systemaudio.listeners",
+    private static let listenerQueue = DispatchQueue(label: "org.better-web.osa.recorder.systemaudio.listeners",
                                                      qos: .utility)
 
     /// The tap, or nothing when the audio system refuses one.
     static func make() async -> RecorderSystemAudioTap? {
         guard #available(macOS 14.4, *) else { return nil }
-        let queue = DispatchQueue(label: "com.vorssaint.recorder.systemaudio",
+        let queue = DispatchQueue(label: "org.better-web.osa.recorder.systemaudio",
                                   qos: .userInitiated)
         return await withCheckedContinuation { continuation in
             queue.async {
@@ -126,7 +126,7 @@ final class RecorderSystemAudioTap: @unchecked Sendable {
         guard let ownProcess = Self.ownProcessObject() else { return nil }
         self.ownProcess = ownProcess
         let description = CATapDescription(stereoGlobalTapButExcludeProcesses: [ownProcess])
-        description.name = "Vorssaint Recorder"
+        description.name = "OSA Desktop Recorder"
         description.isPrivate = true
         var tapID = AudioObjectID(0)
         guard AudioHardwareCreateProcessTap(description, &tapID) == noErr, tapID != 0 else {
@@ -204,7 +204,7 @@ final class RecorderSystemAudioTap: @unchecked Sendable {
         guard aggregateID == 0, let clock,
               let hostUID = Self.hostDeviceUID() else { return }
         let aggregate: [String: Any] = [
-            kAudioAggregateDeviceNameKey: "Vorssaint Recorder",
+            kAudioAggregateDeviceNameKey: "OSA Desktop Recorder",
             kAudioAggregateDeviceUIDKey: UUID().uuidString,
             kAudioAggregateDeviceIsPrivateKey: true,
             kAudioAggregateDeviceMainSubDeviceKey: hostUID,

@@ -45,7 +45,7 @@ enum RecordingSharingSupport {
         let audioBitRate: Int
     }
 
-    static let developerBundleIdentifier = "com.vorssaint.utils.dev"
+    static let developerBundleIdentifier = "org.better-web.osa.desktop.dev"
     /// Leaves transport headroom below the public 100 MB request ceiling.
     static let maximumUploadBytes = 96_000_000
     static let targetUploadBytes = 90_000_000

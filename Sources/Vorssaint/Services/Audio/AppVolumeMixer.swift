@@ -161,7 +161,7 @@ final class AppVolumeMixer: ObservableObject {
     /// pass the mixer no longer wants is dropped rather than publishing state
     /// that is already out of date.
     private var refresh = MixerRefreshCoordinator()
-    private let buildQueue = DispatchQueue(label: "com.vorssaint.utils.mixer", qos: .userInitiated)
+    private let buildQueue = DispatchQueue(label: "org.better-web.osa.desktop.mixer", qos: .userInitiated)
     /// Every CoreAudio property read runs here, and every HAL notification is
     /// delivered here. Reads serialize behind the audio daemon's device state,
     /// so while a device is being reconfigured (headphones pairing, an
@@ -192,7 +192,7 @@ final class AppVolumeMixer: ObservableObject {
     private var outputStepReadGeneration = 0
     private let outputControlLock = NSLock()
     private var outputControlLifetime = UUID()
-    private let halQueue = DispatchQueue(label: "com.vorssaint.utils.mixer.hal", qos: .userInitiated)
+    private let halQueue = DispatchQueue(label: "org.better-web.osa.desktop.mixer.hal", qos: .userInitiated)
 
     private init() {}
 
@@ -2377,7 +2377,7 @@ final class LevelCompensationWatch {
     /// engine, so a read waiting on an output that is being reconfigured
     /// never holds back another engine's correction. The two values below
     /// are touched only on it.
-    private let queue = DispatchQueue(label: "com.vorssaint.utils.mixer.level",
+    private let queue = DispatchQueue(label: "org.better-web.osa.desktop.mixer.level",
                                       qos: .userInitiated)
     private var lastDevices = Set<AudioObjectID>()
     private var lastReadAt: CFAbsoluteTime = 0
@@ -2703,7 +2703,7 @@ private final class TapGainEngine: GainEngine {
         levelWatch = LevelCompensationWatch.started(objects: objects) { compensation.value = $0 }
 
         let aggregate: [String: Any] = [
-            kAudioAggregateDeviceNameKey: "Vorssaint Mixer",
+            kAudioAggregateDeviceNameKey: "OSA Desktop Mixer",
             kAudioAggregateDeviceUIDKey: UUID().uuidString,
             kAudioAggregateDeviceIsPrivateKey: true,
             kAudioAggregateDeviceMainSubDeviceKey: outputDeviceUID,
@@ -2805,7 +2805,7 @@ private final class TapGainEngine: GainEngine {
 
     /// Where the new rate is read, away from whatever thread the answer
     /// arrived on. Serial, so two changes in a row cannot land out of order.
-    fileprivate static let rateQueue = DispatchQueue(label: "com.vorssaint.utils.mixer.rate",
+    fileprivate static let rateQueue = DispatchQueue(label: "org.better-web.osa.desktop.mixer.rate",
                                                  qos: .userInitiated)
     /// How many teardowns may sit in the HAL at once. Operations past the
     /// bound wait in the queue holding no thread, so however often a wedged
@@ -2819,7 +2819,7 @@ private final class TapGainEngine: GainEngine {
     /// above so the parked ones cannot take the thread pool with them.
     fileprivate static let teardownQueue: OperationQueue = {
         let queue = OperationQueue()
-        queue.name = "com.vorssaint.utils.mixer.teardown"
+        queue.name = "org.better-web.osa.desktop.mixer.teardown"
         queue.qualityOfService = .utility
         queue.maxConcurrentOperationCount = maximumConcurrentTeardowns
         return queue
@@ -2981,7 +2981,7 @@ private final class AirPlayGainEngine: GainEngine {
         let aggregate: [String: Any] = [
             // A fixed name, listed in MicMuteSupport.ownDeviceNames, so no
             // device list ever offers this private aggregate as an output.
-            kAudioAggregateDeviceNameKey: "Vorssaint AirPlay",
+            kAudioAggregateDeviceNameKey: "OSA Desktop AirPlay",
             kAudioAggregateDeviceUIDKey: UUID().uuidString,
             kAudioAggregateDeviceIsPrivateKey: true,
             kAudioAggregateDeviceMainSubDeviceKey: clockDeviceUID,

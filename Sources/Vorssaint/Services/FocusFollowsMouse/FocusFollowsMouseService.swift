@@ -8,7 +8,7 @@ import CoreGraphics
 final class FocusFollowsMouseService {
     static let shared = FocusFollowsMouseService()
 
-    private let queryQueue = DispatchQueue(label: "com.vorssaint.focus-follows-mouse")
+    private let queryQueue = DispatchQueue(label: "org.better-web.osa.focus-follows-mouse")
     private var timer: Timer?
     private var mouseMonitor: Any?
     private var observers: [NSObjectProtocol] = []

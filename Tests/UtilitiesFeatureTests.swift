@@ -948,8 +948,8 @@ enum UtilitiesFeatureTests {
         suite.expect(RadialMenuSupport.needsAccessibility([shortcutProfile]),
                "profile with keyboard shortcut slice needs Accessibility")
 
-        let profileTestDefaults = UserDefaults(suiteName: "com.vorssaint.tests.radialProfiles")!
-        profileTestDefaults.removePersistentDomain(forName: "com.vorssaint.tests.radialProfiles")
+        let profileTestDefaults = UserDefaults(suiteName: "org.better-web.osa.tests.radialProfiles")!
+        profileTestDefaults.removePersistentDomain(forName: "org.better-web.osa.tests.radialProfiles")
         profileTestDefaults.set(true, forKey: AppFeature.radialMenu.availabilityKey)
         profileTestDefaults.set(true, forKey: DefaultsKey.radialMenuEnabled)
 
@@ -1036,7 +1036,7 @@ enum UtilitiesFeatureTests {
                 && radialRowCode.contains(".manageButton")
                 && !radialRowCode.contains("ShortcutRecorderButton"),
                "the Keyboard Shortcuts page shows the wheels' shortcuts and links to their page instead of recording the role key")
-        profileTestDefaults.removePersistentDomain(forName: "com.vorssaint.tests.radialProfiles")
+        profileTestDefaults.removePersistentDomain(forName: "org.better-web.osa.tests.radialProfiles")
 
         let testImage = NSImage(size: NSSize(width: 16, height: 16))
         testImage.lockFocus()
@@ -1065,8 +1065,8 @@ enum UtilitiesFeatureTests {
                 && RadialMenuSupport.claimedMouseButtons(iconProfilesData) == fullyDecodedButtons,
                "claimed mouse buttons read without the items match the full profile decode")
 
-        let legacyButtonDefaults = UserDefaults(suiteName: "com.vorssaint.tests.radialLegacyButton")!
-        legacyButtonDefaults.removePersistentDomain(forName: "com.vorssaint.tests.radialLegacyButton")
+        let legacyButtonDefaults = UserDefaults(suiteName: "org.better-web.osa.tests.radialLegacyButton")!
+        legacyButtonDefaults.removePersistentDomain(forName: "org.better-web.osa.tests.radialLegacyButton")
         legacyButtonDefaults.set(RadialMenuMouseTrigger.forward.rawValue,
                                  forKey: DefaultsKey.radialMenuMouseButton)
         suite.expect(RadialMenuSupport.claimedMouseButtons(nil, defaults: legacyButtonDefaults)
@@ -1075,7 +1075,7 @@ enum UtilitiesFeatureTests {
                                                          defaults: legacyButtonDefaults)
                 == [MouseButtonShortcutSupport.forwardButtonNumber],
                "claimed mouse buttons fall back to the legacy button key like the full decode")
-        legacyButtonDefaults.removePersistentDomain(forName: "com.vorssaint.tests.radialLegacyButton")
+        legacyButtonDefaults.removePersistentDomain(forName: "org.better-web.osa.tests.radialLegacyButton")
 
         var reorderItems = [
             RadialMenuItem(kind: .app, name: "A"),

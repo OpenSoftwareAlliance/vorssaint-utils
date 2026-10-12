@@ -24,7 +24,9 @@ URLS = [
     (re.compile(r"com\.vorssaint\.utils"), "org.better-web.osa.desktop"),
     (re.compile(r"com\.vorssaint(?!\.utils)"), "org.better-web.osa"),
 ]
-WORD = re.compile(r"(?<![A-Za-z0-9_])Vorssaint(?![A-Za-z0-9_])")
+# A path segment ("Sources/Vorssaint/", "build/Vorssaint") is an internal name; the internal phase renames it.
+# Dotted/hyphen-lowercase suffixes ("Vorssaint.Tests.X", "Vorssaint-update") are identifiers, also internal.
+WORD = re.compile(r"(?<![A-Za-z0-9_/])Vorssaint(?![A-Za-z0-9_/])(?!\.(?!app\b)[A-Za-z_])(?!-[a-z])")
 STRING_LITERAL = re.compile(r'"(?:[^"\\]|\\.)*"')
 
 

@@ -7,7 +7,7 @@ import Foundation
 /// Cancellation releases the caller, but an in-flight system call keeps its
 /// place until it actually returns. A cancelled queued request never captures.
 final class WindowServerCaptureQueue: @unchecked Sendable {
-    private let queue = DispatchQueue(label: "com.vorssaint.window-capture", qos: .userInitiated)
+    private let queue = DispatchQueue(label: "org.better-web.osa.window-capture", qos: .userInitiated)
     private let lock = NSLock()
     private var pendingCount = 0
 
