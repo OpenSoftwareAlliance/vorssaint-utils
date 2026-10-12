@@ -250,6 +250,7 @@ if (( TEST )); then
     TEST_OBJECT_DIR="build/objects/tests"
     mkdir -p "$TEST_OBJECT_DIR"
     TEST_SOURCES=(
+        Sources/Vorssaint/Core/OSABuildConfiguration.swift
         Sources/Vorssaint/Services/Media/MediaSupport.swift
         Sources/Vorssaint/Core/QuitProtectionSupport.swift
         Sources/Vorssaint/Core/QuitProtectionStrings.swift
@@ -658,6 +659,10 @@ cp Resources/agent-prices.json "$STAGE/Contents/Resources/agent-prices.json"
 cp Resources/com.vorssaint.utils.fan-control.plist \
     "$STAGE/Contents/Library/LaunchDaemons/$FAN_HELPER_ID.plist"
 cp Resources/Info.plist "$STAGE/Contents/Info.plist"
+# OSA build-time configuration (see Sources/Vorssaint/Core/OSABuildConfiguration.swift).
+/usr/libexec/PlistBuddy -c "Add :OSATeamID string ${OSA_TEAM_ID:-}" "$STAGE/Contents/Info.plist"
+/usr/libexec/PlistBuddy -c "Add :OSAShareEndpoint string ${OSA_SHARE_ENDPOINT:-}" "$STAGE/Contents/Info.plist"
+/usr/libexec/PlistBuddy -c "Add :OSARepository string ${OSA_REPOSITORY:-OpenSoftwareAlliance/osa-desktop}" "$STAGE/Contents/Info.plist"
 cp CHANGELOG.md "$STAGE/Contents/Resources/CHANGELOG.md"
 for lproj in Resources/*.lproj(N); do
     cp -R "$lproj" "$STAGE/Contents/Resources/"
