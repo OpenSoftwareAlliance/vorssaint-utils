@@ -35,7 +35,7 @@ jobs:
       - name: Rebrand tooling is idempotent
         run: |
           for phase in visible internal; do
-            python3 Tools/rebrand.py --phase "$phase" --dry-run | tee /dev/stderr | tail -1 | grep -F "0 files rewritten, 0 paths moved"
+            python3 Tools/rebrand.py --phase "$phase" --dry-run | tee /dev/stderr | tail -1 | grep -Fx "$phase: 0 files rewritten, 0 paths moved"
           done
           ./Tools/test_check_rebrand.sh
           (cd Tools && python3 -m unittest test_rebrand)
@@ -64,7 +64,7 @@ jobs:
       - name: Rebrand tooling is idempotent
         run: |
           for phase in visible internal; do
-            python3 Tools/rebrand.py --phase "$phase" --dry-run | tee /dev/stderr | tail -1 | grep -F "0 files rewritten, 0 paths moved"
+            python3 Tools/rebrand.py --phase "$phase" --dry-run | tee /dev/stderr | tail -1 | grep -Fx "$phase: 0 files rewritten, 0 paths moved"
           done
           ./Tools/test_check_rebrand.sh
           (cd Tools && python3 -m unittest test_rebrand)
