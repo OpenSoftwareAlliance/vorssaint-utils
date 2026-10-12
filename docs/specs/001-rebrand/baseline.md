@@ -32,3 +32,15 @@ DEVELOPER INSTALL ISOLATION TESTS OK
 No failing checks. The output contains no `TESTS FAILED` block and no `FAILED` lines.
 
 Log noise: the test run prints 44 lines of `sandbox_extension_consume failed: 1 (Operation not permitted)`. These are not test failures.
+
+## Final run (2026-10-12, f861b12)
+
+Commands run at f861b12 (the later commit changes only CHANGELOG.md and this file):
+
+- `./build.sh`: exit 0, bundle ready.
+- `./build.sh --dev`: exit 0, bundle ready (created the local "OSA Desktop Signing" identity on first run).
+- `./build.sh --test`: exit 0. Summary line: `TESTS OK (115884 checks)`, followed by `PREFERENCE CLEANUP TESTS OK`, `UNINSTALL SPACES TESTS OK` and `DEVELOPER INSTALL ISOLATION TESTS OK`.
+
+Failing checks: none. The environment-dependent set (dock-autohide, switcher, NotchCompactTests) passed in this run, so no base comparison on fe24c17 was needed. The `sandbox_extension_consume failed` lines at the top of the test output are tool-sandbox noise, not test failures.
+
+Also at the final state: `./Tools/check-rebrand.sh` OK, `Tools/test_check_rebrand.sh` OK, `python3 -m unittest test_rebrand` OK (17 tests), and both `Tools/rebrand.py --dry-run` phases print `0 files rewritten, 0 paths moved`.
