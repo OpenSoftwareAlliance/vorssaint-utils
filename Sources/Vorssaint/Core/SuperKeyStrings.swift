@@ -206,7 +206,7 @@ extension SuperKeyStrings {
         soloInputSource: "Prepne zdroj vstupu; podržaním aktivujete Caps Lock",
         mappingForeignMapping: "Mapovanie klávesov inej aplikácie používa vybraný kláves. Odstráňte ho v tejto aplikácii: samotné ukončenie nestačí.",
         mappingSystemRefused: "macOS odmietol mapovanie klávesov. Znova pripojte klávesnicu alebo reštartujte Mac a potom to znova zapnite.",
-        keyboardTapRefused: "macOS nedovolil Vorssaintu sledovať klávesnicu. OSA Desktop vypnite a zapnite v Systémových nastaveniach › Súkromie a bezpečnosť › Prístupnosť a potom túto voľbu znova zapnite."
+        keyboardTapRefused: "macOS nedovolil aplikácii OSA Desktop sledovať klávesnicu. OSA Desktop vypnite a zapnite v Systémových nastaveniach › Súkromie a bezpečnosť › Prístupnosť a potom túto voľbu znova zapnite."
     )
 
     static let de = SuperKeyStrings(

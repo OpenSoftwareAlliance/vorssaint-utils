@@ -227,7 +227,7 @@ extension Strings {
         switcherShortcutHintWindows: "Fenster",
         switcherWindowShortcutCaption: "Öffnet einen Umschalter für die Fenster der vordersten App. Bei geöffnetem Umschalter springt er zwischen den Fenstern der ausgewählten App.",
         switcherTakeOverSystemShortcuts: "macOS-⌘Tab und ⌘` ersetzen",
-        switcherTakeOverSystemShortcutsCaption: "Deaktiviert die passenden macOS-App- und Fensterkurzbefehle nur, solange Vorssaints Umschalter aktiv ist. Alle laufenden Apps bleiben erreichbar.",
+        switcherTakeOverSystemShortcutsCaption: "Deaktiviert die passenden macOS-App- und Fensterkurzbefehle nur, solange der Umschalter von OSA Desktop aktiv ist. Alle laufenden Apps bleiben erreichbar.",
         switcherAppearanceDelay: "Einblendverzögerung",
         switcherAppearanceDelayCaption: "Wie lange das Tastenkürzel gehalten werden muss, bevor der Umschalter erscheint.",
         switcherInstantSelection: "Sofortige Auswahl",

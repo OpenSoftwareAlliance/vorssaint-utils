@@ -954,7 +954,7 @@ enum UpdateFeatureTests {
                    appPath: "/private/var/folders/ab/xyz/T/AppTranslocation/1F2/d/OSA Desktop.app",
                    volumeIsReadOnly: { _ in false }),
                "translocated apps are flagged as not updatable in place")
-        suite.expect(UpdateInstallerSupport.runsFromImmutableLocation(appPath: "/Volumes/OSA Desktop/OSA Desktop.app",
+        suite.expect(UpdateInstallerSupport.runsFromImmutableLocation(appPath: "/Volumes/Vorssaint/OSA Desktop.app",
                                                                 volumeIsReadOnly: { _ in true }),
                "apps on a read-only volume (the DMG) are flagged as not updatable in place")
         suite.expect(!UpdateInstallerSupport.runsFromImmutableLocation(appPath: "/Volumes/ExternalSSD/OSA Desktop.app",

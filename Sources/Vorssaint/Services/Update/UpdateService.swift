@@ -124,7 +124,7 @@ final class UpdateService: ObservableObject {
 
         var request = URLRequest(url: URL(string: endpoint)!)
         request.setValue("application/vnd.github+json", forHTTPHeaderField: "Accept")
-        request.setValue("OSA Desktop/\(AppInfo.version)", forHTTPHeaderField: "User-Agent")
+        request.setValue("OSADesktop/\(AppInfo.version)", forHTTPHeaderField: "User-Agent")
         request.cachePolicy = .reloadIgnoringLocalCacheData
 
         URLSession.shared.dataTask(with: request) { [weak self] data, _, error in

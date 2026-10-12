@@ -6,7 +6,7 @@ import Foundation
 /// Static identity of the app, shared by UI, notifications and tooling.
 enum AppInfo {
     static let name = "OSA Desktop"
-    static let copyright = "© 2026 OSA Desktop"
+    static let copyright = "© 2026 Vorssaint and Open Software Alliance contributors"
     static let websiteURL = URL(string: "https://osa.better-web.org")!
     static let repositoryURL = URL(string: "https://github.com/OpenSoftwareAlliance/osa-desktop")!
 

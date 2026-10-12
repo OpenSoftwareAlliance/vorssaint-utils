@@ -39,6 +39,15 @@ class VisiblePhase(unittest.TestCase):
         self.assertEqual(self.v("a.swift", '"Vorssaint.app"'), '"OSA Desktop.app"')
         self.assertEqual(self.v("a.md", "Open Vorssaint. Then wait; Vorssaint-Symbol"), "Open OSA Desktop. Then wait; OSA Desktop-Symbol")
 
+    def test_display_path_rewritten_but_not_segments(self):
+        self.assertEqual(self.v("a.swift", '"/Applications/Vorssaint.app"'), '"/Applications/OSA Desktop.app"')
+        self.assertEqual(self.v("a.swift", '"Sources/Vorssaint/App"'), '"Sources/Vorssaint/App"')
+        self.assertEqual(self.v("a.swift", '"/Applications/Vorssaint Utils.app"'), '"/Applications/Vorssaint Utils.app"')
+
+    def test_copyright_sign_preserved(self):
+        line = 'static let copyright = "© 2026 Vorssaint"'
+        self.assertEqual(self.v("a.swift", line), line)
+
     def test_copyright_preserved(self):
         line = "// Copyright (C) 2026 Vorssaint"
         self.assertEqual(self.v("a.swift", line), line)

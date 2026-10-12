@@ -24,9 +24,11 @@ URLS = [
     (re.compile(r"com\.vorssaint\.utils"), "org.better-web.osa.desktop"),
     (re.compile(r"com\.vorssaint(?!\.utils)"), "org.better-web.osa"),
 ]
-# A path segment ("Sources/Vorssaint/", "build/Vorssaint") is an internal name; the internal phase renames it.
-# Dotted/hyphen-lowercase suffixes ("Vorssaint.Tests.X", "Vorssaint-update") are identifiers, also internal.
-WORD = re.compile(r"(?<![A-Za-z0-9_/])Vorssaint(?![A-Za-z0-9_/])(?!\.(?!app\b)[A-Za-z_])(?!-[a-z])")
+# Internal names stay for the internal phase: directory segments ("Sources/Vorssaint/",
+# "build/Vorssaint", "Application Support/Vorssaint/"), dotted/hyphen-lowercase identifiers
+# ("Vorssaint.Tests.X", "Vorssaint-update") and the legacy upstream name "Vorssaint Utils".
+# "/Applications/Vorssaint.app" is a display path and is rewritten.
+WORD = re.compile(r"(?<![A-Za-z0-9_])(?<!Sources/)(?<!build/)Vorssaint(?![A-Za-z0-9_/])(?!\.(?!app\b)[A-Za-z_])(?!-[a-z])(?! Utils)")
 STRING_LITERAL = re.compile(r'"(?:[^"\\]|\\.)*"')
 
 
@@ -73,7 +75,7 @@ def rewrite_text(path, text, phase):
         return text
     out = []
     for line in text.splitlines(keepends=True):
-        if "Copyright" in line:
+        if "Copyright" in line or "©" in line:
             out.append(line)
         elif phase == "visible":
             out.append(_visible_line(path, line))

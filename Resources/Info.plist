@@ -79,7 +79,7 @@
 	<key>NSCameraUseContinuityCameraDeviceType</key>
 	<true/>
 	<key>NSHumanReadableCopyright</key>
-	<string>© 2026 OSA Desktop</string>
+	<string>© 2026 Vorssaint and Open Software Alliance contributors</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 </dict>

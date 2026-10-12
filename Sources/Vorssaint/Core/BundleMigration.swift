@@ -6,8 +6,8 @@ import AppKit
 /// Completes the on-disk rename for installs carried over from a pre-2.5 build.
 ///
 /// The in-app updater shipped in those builds installs the new version AT THE
-/// OLD PATH ("/Applications/OSA Desktop Utils.app"), so right after updating the
-/// app is running from a bundle still named "OSA Desktop Utils.app". We rename
+/// OLD PATH ("/Applications/Vorssaint Utils.app"), so right after updating the
+/// app is running from a bundle still named "Vorssaint Utils.app". We rename
 /// that bundle to "OSA Desktop.app" through a detached helper that runs only after
 /// we quit (so a running bundle is never mutated), then relaunch. The bundle id
 /// is unchanged, so granted permissions follow the bundle to its new path.
@@ -22,7 +22,7 @@ import AppKit
 /// could mistake the just-updated app for a leftover; that is fixed by routing
 /// the old-name case to a rename and comparing canonical paths everywhere else.
 enum BundleMigration {
-    private static let oldName = "OSA Desktop Utils.app"
+    private static let oldName = "Vorssaint Utils.app"
     private static let newName = "OSA Desktop.app"
 
     /// Returns true when the app is about to quit and relaunch under the new
