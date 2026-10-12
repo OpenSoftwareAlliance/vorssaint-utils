@@ -8,7 +8,7 @@
 "NSBluetoothAlwaysUsageDescription" = "OSA Desktop использует Bluetooth только для чтения заряда подключённых периферийных устройств. Ничего не покидает ваш Mac.";
 
 /* macOS Microphone permission prompt. */
-"NSMicrophoneUsageDescription" = "OSA Desktop записывает микрофон, только когда вы включаете его для записи экрана. Звук остаётся на вашем Mac, если только вы не создадите временную ссылку.";
+"NSMicrophoneUsageDescription" = "OSA Desktop записывает микрофон, только когда вы включаете его для записи экрана. Звук остаётся на вашем Mac.";
 
 /* macOS Camera permission prompt. */
 "NSCameraUsageDescription" = "OSA Desktop показывает вашу камеру только в открытом вами окне предпросмотра, чтобы вы могли проверить, как выглядите перед звонком. Ничего не записывается и не покидает ваш Mac.";

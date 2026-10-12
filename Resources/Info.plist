@@ -61,7 +61,7 @@
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>OSA Desktop uses Bluetooth only to read the battery level of connected peripherals. Nothing leaves your Mac.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>OSA Desktop records your microphone only when you turn it on for a screen recording. The audio stays on your Mac unless you choose to create a temporary link.</string>
+	<string>OSA Desktop records your microphone only when you turn it on for a screen recording. The audio stays on your Mac.</string>
 	<key>NSCalendarsFullAccessUsageDescription</key>
 	<string>Show your upcoming appointments in the notch. Calendar events stay on this Mac.</string>
 	<key>NSCameraUsageDescription</key>

@@ -8,7 +8,7 @@
 "NSBluetoothAlwaysUsageDescription" = "OSA Desktop, Bluetooth'u yalnızca bağlı çevre birimlerinin pil düzeyini okumak için kullanır. Hiçbir veri Mac'inden çıkmaz.";
 
 /* macOS Microphone permission prompt. */
-"NSMicrophoneUsageDescription" = "OSA Desktop, mikrofonunuzu yalnızca ekran kaydı için açtığınızda kaydeder. Geçici bir bağlantı oluşturmadığınız sürece ses Mac'inizde kalır.";
+"NSMicrophoneUsageDescription" = "OSA Desktop, mikrofonunuzu yalnızca ekran kaydı için açtığınızda kaydeder. Ses Mac'inizde kalır.";
 
 /* macOS Camera permission prompt. */
 "NSCameraUsageDescription" = "OSA Desktop, kameranızı yalnızca açtığınız önizleme penceresinde gösterir; böylece aramadan önce nasıl göründüğünüzü kontrol edebilirsiniz. Hiçbir şey kaydedilmez veya Mac'inizden çıkmaz.";

@@ -8,7 +8,7 @@
 "NSBluetoothAlwaysUsageDescription" = "OSA Desktop verwendet Bluetooth nur, um den Akkustand verbundener Peripheriegeräte zu lesen. Nichts verlässt deinen Mac.";
 
 /* macOS Microphone permission prompt. */
-"NSMicrophoneUsageDescription" = "OSA Desktop nimmt dein Mikrofon nur auf, wenn du es für eine Bildschirmaufnahme einschaltest. Der Ton bleibt auf deinem Mac, außer du erstellst einen temporären Link.";
+"NSMicrophoneUsageDescription" = "OSA Desktop nimmt dein Mikrofon nur auf, wenn du es für eine Bildschirmaufnahme einschaltest. Der Ton bleibt auf deinem Mac.";
 
 /* macOS Camera permission prompt. */
 "NSCameraUsageDescription" = "OSA Desktop zeigt deine Kamera nur im Vorschaufenster, das du öffnest, damit du vor einem Anruf prüfen kannst, wie du aussiehst. Es wird nichts aufgezeichnet und nichts verlässt deinen Mac.";
