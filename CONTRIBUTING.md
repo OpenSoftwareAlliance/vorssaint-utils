@@ -12,7 +12,7 @@ sign the app bundle.
 
 ```sh
 git clone https://github.com/OpenSoftwareAlliance/osa-desktop.git
-cd osa-desktop-utils
+cd osa-desktop
 ./build.sh --dev
 ./build/OSADesktopDeveloper --selftest
 ./build.sh --test

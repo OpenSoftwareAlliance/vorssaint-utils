@@ -1,6 +1,6 @@
 # Privacy
 
-OSA Desktop is built to be local-first. Core features run on your Mac, and the app has no OSA Desktop account or cloud dashboard. Its OSADesktop-operated services are limited to temporary screenshot and recording links and feedback you explicitly choose to send.
+OSA Desktop is built to be local-first. Core features run on your Mac, and the app has no OSA Desktop account or cloud dashboard. The only network services it can use beyond the sources listed below are temporary screenshot and recording links and feedback you explicitly choose to send. Link sharing and feedback are off unless an OSA share endpoint is configured at build time (`OSAShareEndpoint`, which must be an `https` URL); a stock build ships with it empty and sends nothing to any OSA Desktop service.
 
 ## The short version
 
@@ -59,7 +59,7 @@ The Online source also downloads the complete public app catalog from `formulae.
 
 The check runs when you open the list or press Check now, and on a schedule only if you set one. The three source switches under App updates control these connections independently. Turning off the App Store source stops its store and bundle identifier lookups. Turning off the Online source stops both developer feed requests and public catalog requests on subsequent checks.
 
-5. **Temporary screenshot links, only when you choose to create one.** Creating a link sends the rendered PNG and your chosen expiration of 1, 6 or 24 hours to the OSA Desktop service over HTTPS. It does not send your name, account, device identifier or MAC address. On your Mac, the feature keeps only the link, expiration and private deletion token while the link is active, so you can copy it or delete it early. The service holds your public IP address in memory for no more than 24 hours to prevent abuse, while network providers may process normal HTTPS request data under their own policies.
+5. **Temporary screenshot links, only when you choose to create one.** Creating a link sends the rendered PNG and your chosen expiration of 1, 6 or 24 hours to the configured share service over HTTPS. It does not send your name, account, device identifier or MAC address. On your Mac, the feature keeps only the link, expiration and private deletion token while the link is active, so you can copy it or delete it early. The service holds your public IP address in memory for no more than 24 hours to prevent abuse, while network providers may process normal HTTPS request data under their own policies.
 
 The uploaded PNG is decoded and rebuilt without embedded metadata. The image and its link metadata are permanently deleted when the link expires or you delete it, and the service does not create screenshot backups. Private moderation stores the active link, not another uploaded image, and removes that message when the link ends. Anyone with the link can view, download, save or redistribute the image, and active links are available to the service operator for abuse moderation. Share only with people you trust.
 
