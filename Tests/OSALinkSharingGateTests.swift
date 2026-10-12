@@ -41,6 +41,15 @@ enum OSALinkSharingGateTests {
             suite.expect(FeedbackEndpoint.url(production: nil) == nil, "feedback: unavailable when unconfigured")
             suite.expect(FeedbackEndpoint.url(production: prod)?.absoluteString
                          == "https://share.osa.better-web.org/v1/feedback", "feedback: path appended")
+            // Central shortcuts page lists the upload shortcut only with sharing.
+            suite.expect(!GlobalShortcutRole.availableRoles(isAvailable: { _ in true },
+                                                            linkSharingAvailable: false)
+                            .contains(.screenshotUpload),
+                         "shortcuts: upload role excluded when link sharing is unavailable")
+            suite.expect(GlobalShortcutRole.availableRoles(isAvailable: { _ in true },
+                                                           linkSharingAvailable: true)
+                            .contains(.screenshotUpload),
+                         "shortcuts: upload role included when link sharing is available")
             // No Vorssaint host anywhere in the defaults.
             suite.expect(OSABuildConfiguration.shareEndpoint(in: [:]) == nil, "no built-in default endpoint")
         }

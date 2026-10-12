@@ -1009,9 +1009,13 @@ enum GlobalShortcutRole: CaseIterable, Identifiable {
     /// Every shortcut belonging to an installed feature, including choices
     /// that are currently switched off but can still be edited and kept for
     /// later on the central shortcuts page.
-    static func availableRoles(isAvailable: (AppFeature) -> Bool = { $0.isAvailable })
+    /// The upload shortcut is left out while link sharing has no endpoint.
+    static func availableRoles(isAvailable: (AppFeature) -> Bool = { $0.isAvailable },
+                               linkSharingAvailable: Bool = true)
         -> [GlobalShortcutRole] {
-        allCases.filter { $0.isAvailable(using: isAvailable) }
+        allCases.filter {
+            $0.isAvailable(using: isAvailable) && (linkSharingAvailable || $0 != .screenshotUpload)
+        }
     }
 
     /// The features whose shortcuts share one Screen capture group on the

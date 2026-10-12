@@ -20,7 +20,9 @@ struct ShortcutsSettings: View {
     private var hub: FeatureHubStrings { FeatureStrings.hub(l10n.language) }
 
     private var availableRoles: [GlobalShortcutRole] {
-        GlobalShortcutRole.availableRoles(isAvailable: { $0.isAvailable }).filter {
+        GlobalShortcutRole.availableRoles(
+            isAvailable: { $0.isAvailable },
+            linkSharingAvailable: ScreenshotShareService.shared.isAvailable).filter {
             !$0.isKeyboardBrightness || BrightnessService.keyboardLightIsSupported
         }
     }
